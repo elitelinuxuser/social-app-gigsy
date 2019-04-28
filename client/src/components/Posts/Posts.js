@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Posts from '../Posts/Posts';
 
-const Homepage = (props) => {
+const Posts = (props) => {
   return (
     <div />
   )
 }
 
-export default Homepage;
+export default Posts;

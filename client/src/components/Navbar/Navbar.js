@@ -10,8 +10,11 @@ class Navbar extends React.Component {
           HomePage
         </Link>
       <div className="right menu">
-        <Link to="/logi" className="item">
+        <Link to="/login" className="item">
           Login
+        </Link>
+        <Link to="/Admin" className="item">
+          Admin
         </Link>
       </div>
     </div>
