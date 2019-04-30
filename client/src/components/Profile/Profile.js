@@ -5,6 +5,10 @@ import {
   Form,
   Input,
   Radio,
+  Segment,
+  Message,
+  Container,
+  Header,
   Select,
   TextArea } from 'semantic-ui-react';
 const options = [
@@ -13,49 +17,57 @@ const options = [
 ]
 
 class FormExampleFieldControl extends Component {
-  state = {}
+  state = {
+    firstname:"",
+    lastname:"",
+    about:"",
+    isAgreed: "false"
+  }
 
-  handleChange = (e, { value }) => this.setState({ value })
-
+  handleChange = (e, { name,value }) => this.setState({ [name]: value })
+  handleSubmit = e => {
+    this.setState({
+      firstname:"",
+      lastname:"",
+      about:"",
+      isAgreed: "true"
+    });
+  };
   render() {
-    const { value } = this.state
+    const { firstname, lastname, about, isAgreed } = this.state
     return (
-      <Segment inverted>
-        <Form inverted>
-          <Form.Group widths='equal'>
-            <Form.Field control={Input} label='First name' placeholder='First name' />
-            <Form.Field control={Input} label='Last name' placeholder='Last name' />
-            <Form.Field control={Select} label='Gender' options={options} placeholder='Gender' />
-          </Form.Group>
-          <Form.Group inline>
-            <label>Quantity</label>
-            <Form.Field
-              control={Radio}
-              label='One'
-              value='1'
-              checked={value === '1'}
-              onChange={this.handleChange}
-            />
-            <Form.Field
-              control={Radio}
-              label='Two'
-              value='2'
-              checked={value === '2'}
-              onChange={this.handleChange}
-            />
-            <Form.Field
-              control={Radio}
-              label='Three'
-              value='3'
-              checked={value === '3'}
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Field control={TextArea} label='About' placeholder='Tell us more about you...' />
-          <Form.Field control={Checkbox} label='I agree to the Terms and Conditions' />
-          <Form.Field control={Button}>Submit</Form.Field>
-        </Form>
-      </Segment>
+      <Container>
+        <Header as="h1" dividing>Please enter the details:</Header>
+        <Message info><p>We protect your data safely and we will not use it for monetory purposes.</p></Message>
+        <Segment inverted>
+          <Form inverted onSubmit={this.handleSubmit}>
+            <Form.Group widths='equal'>
+              <Form.Input
+                label="First name"
+                name="firstname"
+                placeholder="First name"
+                value={firstname}
+                onChange={this.handleChange}
+              />
+              <Form.Input
+                label="Last name"
+                name="lastname"
+                placeholder="Last name"
+                value={lastname}
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+
+            <Form.Field control={TextArea} label='About' name="about" onChange="{this.handleChange}" value={about} placeholder='Tell us more about you...' />
+            <Form.Group inline><Form.Field control={Checkbox} label='I agree to the Terms and Conditions' name="isAgreed" value={isAgreed} />
+              <a href="https://google.com" >Terms & Conditions</a>
+            </Form.Group>
+            <Form.Button inverted color='green'>
+              Submit
+            </Form.Button>
+          </Form>
+        </Segment>
+      </Container>
     )
   }
 }
