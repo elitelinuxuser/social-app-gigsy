@@ -1,0 +1,13 @@
+Create a web application based on the following use cases:
+
+1. I should be able to register on to the application through my social logins (Google, Facebook) and login. There should be a verification email sent to my inbox so that I click on it, verify and then can start accessing the site.
+2. The moment I login, I should be on a page that has posts from various other people. (Like Facebook)
+3. I should now be able to click on a button somewhere that gives me approval to start posting. This button needs to be visibly seen so that I know as a user that I can create posts subject to being approved as a legitimate user.
+4. When I click on this button, it should let me enter details about myself - name, username, phone number and then submit it for approval.
+5. As an admin, I should be able to see that somebody has sent me this profile for approval (with the fields as in point 4) and I should be able to approve or reject this profile with a reason.
+6. As an admin, once I approve/reject the profile, the user should get an email notification saying that the profile is approved or rejected. In case the profile is approved, the user should be able to start creating posts on the web application.
+7. As a user, I should have the ability to add images or videos to the post and then be able to submit it - similar to Facebook.
+
+Note - this application is to be developed using React, Node.js and Mongo DB. When we meet on the 5th/6th of May (which we will tell you about when and where exactly), we should be able to see this demo functioning well.
+
+All the best!

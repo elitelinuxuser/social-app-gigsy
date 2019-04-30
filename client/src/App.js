@@ -4,6 +4,7 @@ import Login from "./components/Login/Login";
 import Profile from "./components/Profile/Profile";
 import Homepage from "./components/Homepage/Homepage";
 import PrivateRoute from "./components/PrivateRoute";
+import Admin from "./components/Admin/Admin";
 
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
@@ -13,8 +14,9 @@ function App() {
     <Router>
       <Switch>
         <PrivateRoute exact path="/" component={Homepage} />
-        <Route exact path="/login" component={Login} />
-        <PrivateRoute exact path="/profile" component={Profile} />
+        <Route path="/login" component={Homepage} />
+        <PrivateRoute path="/profile" component={Profile} />
+        <PrivateRoute path="/admin" component={Admin} />
       </Switch>
     </Router>
   );
