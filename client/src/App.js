@@ -5,7 +5,7 @@ import Profile from "./components/Profile/Profile";
 import Homepage from "./components/Homepage/Homepage";
 import PrivateRoute from "./components/PrivateRoute";
 import Admin from "./components/Admin/Admin";
-
+import ProfileFirst from "./components/Profile/ProfileFirst";
 import "semantic-ui-css/semantic.min.css";
 import "./App.css";
 
@@ -17,7 +17,8 @@ function App() {
         <Route path="/login" component={Homepage} />
         <Route path="/profile" component={Profile} />
         <PrivateRoute path="/profile" component={Profile} />
-        <PrivateRoute path="/admin" component={Admin} />
+        <Route path="/admin" component={Admin} />
+        <Route path="/profilefirst" component={ProfileFirst} />
       </Switch>
     </Router>
   );
