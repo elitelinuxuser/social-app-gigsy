@@ -120,7 +120,7 @@ class MenuExampleSecondaryPointing extends Component {
           <Button color='green' onClick={this.handleApproved}>
             Approve
           </Button>
-          <Button color='red' onclick={this.handleDeclined}>
+          <Button color='red' onClick={this.handleDeclined}>
             Decline
           </Button>
         </div>
