@@ -46,9 +46,7 @@ class Homepage extends Component {
         </Menu>
 
         <Container>
-          <Segment compact>
-            <Posts />
-          </Segment>
+          <Posts />
         </Container>
       </div>
     );

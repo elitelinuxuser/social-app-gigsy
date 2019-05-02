@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Feed, Icon } from "semantic-ui-react";
+import { Feed, Icon, Segment } from "semantic-ui-react";
 import { addLike, removeLike, deletePost } from "../../actions/post";
 
 class Post extends Component {
@@ -8,28 +8,35 @@ class Post extends Component {
     name: "",
     body: "",
     date: "",
-    likes: 0
+    likes: 0,
+    avatar: ""
   };
 
   render() {
-    const { name, body, date, likes } = this.state;
+    const { name, avatar, date, likes, text } = this.props.post;
+    console.log(this.props.auth.user);
+    console.log(this.props.post.likes);
     return (
-      <Feed.Event>
-        <Feed.Label image="/images/avatar/small/joe.jpg" />
-        <Feed.Content>
-          <Feed.Summary>
-            <a>{name}</a>
-            <Feed.Date>{date}</Feed.Date>
-          </Feed.Summary>
-          <Feed.Extra text>{body}</Feed.Extra>
-          <Feed.Meta>
-            <Feed.Like>
-              <Icon name="like" />
-              {likes} Likes
-            </Feed.Like>
-          </Feed.Meta>
-        </Feed.Content>
-      </Feed.Event>
+      <Segment compact>
+        <Feed>
+          <Feed.Event>
+            <Feed.Label image={avatar} />
+            <Feed.Content>
+              <Feed.Summary>
+                <a>{name}</a>
+                <Feed.Date>{date}</Feed.Date>
+              </Feed.Summary>
+              <Feed.Extra text>{text}</Feed.Extra>
+              <Feed.Meta>
+                <Feed.Like>
+                  <Icon name="like" />
+                  {likes.length} Likes
+                </Feed.Like>
+              </Feed.Meta>
+            </Feed.Content>
+          </Feed.Event>
+        </Feed>
+      </Segment>
     );
   }
 }
