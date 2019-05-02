@@ -21,10 +21,13 @@ const style = {
   }
 };
 
+
+
 class FormExampleFieldControl extends Component {
   state = {
     firstname:"",
     lastname:"",
+    phonenumber:"",
     about:"",
     gender: "",
     phno:"",
@@ -33,9 +36,10 @@ class FormExampleFieldControl extends Component {
 
   handleChange = (e, { name,value }) => this.setState({ [name]: value })
   handleSubmit = e => {
-    this.setState({
+     this.setState({
       firstname:"",
       lastname:"",
+      phonenumber:"",
       about:"",
       gender:"",
       phno:"",

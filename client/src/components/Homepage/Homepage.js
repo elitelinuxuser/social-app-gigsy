@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Menu, Segment, Container } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import Posts from "../Posts/Posts";
 import { connect } from "react-redux";
-import { logout } from "../../actions/auth";
+import { logout, loadUser } from "../../actions/auth";
 
 class Homepage extends Component {
   state = { activeItem: "home" };
@@ -13,6 +13,11 @@ class Homepage extends Component {
     const { logout } = this.props;
     logout();
   };
+
+  async componentDidMount() {
+    const { loadUser } = this.props;
+    await loadUser();
+  }
 
   render() {
     const { activeItem } = this.state;
@@ -45,11 +50,7 @@ class Homepage extends Component {
           </Menu.Menu>
         </Menu>
 
-        <Container>
-          <Segment compact>
-            <Posts />
-          </Segment>
-        </Container>
+        <Posts />
       </div>
     );
   }
@@ -61,5 +62,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { logout }
+  { logout, loadUser }
 )(Homepage);

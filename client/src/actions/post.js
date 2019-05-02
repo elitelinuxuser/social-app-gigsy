@@ -11,7 +11,7 @@ import {
   REMOVE_COMMENT
 } from "./types";
 
-const url = "http://localhost:5000";
+const url = "http://35.244.44.23:5000";
 
 // Get posts
 export const getPosts = () => async dispatch => {
