@@ -16,25 +16,29 @@ const options = [
   { key: 'f', text: 'Female', value: 'female' },
 ]
 
+
+
 class FormExampleFieldControl extends Component {
   state = {
     firstname:"",
     lastname:"",
+    phonenumber:"",
     about:"",
     isAgreed: "false"
   }
 
   handleChange = (e, { name,value }) => this.setState({ [name]: value })
   handleSubmit = e => {
-    this.setState({
+     this.setState({
       firstname:"",
       lastname:"",
+      phonenumber:"",
       about:"",
       isAgreed: "true"
     });
   };
   render() {
-    const { firstname, lastname, about, isAgreed } = this.state
+    const { firstname, lastname,phonenumber, about, isAgreed } = this.state
     return (
       <Container>
         <Header as="h1" dividing>Please enter the details:</Header>
