@@ -12,6 +12,7 @@ import {
 import { connect } from "react-redux";
 import { login } from "../../actions/auth";
 import "./Login.css";
+import { Link, Redirect } from "react-router-dom";
 
 class Login extends Component {
   state = {
@@ -35,6 +36,12 @@ class Login extends Component {
     });
   };
 
+  renderRedirect = () => {
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
+  };
+
   render() {
     const { email, password, loading } = this.state;
     return (
@@ -43,6 +50,7 @@ class Login extends Component {
           <Header as="h2" textAlign="center">
             Login
           </Header>
+          {this.renderRedirect()}
           <Segment>
             <Form size="large" onSubmit={this.handleSubmit}>
               <Form.Input
@@ -83,7 +91,7 @@ class Login extends Component {
             </Button>
           </Segment>
           <Message align="center">
-            Not registered yet? <a href="#">Sign Up</a>
+            Not registered yet? <Link to="/register">Sign Up</Link>
           </Message>
         </Grid.Column>
       </Grid>

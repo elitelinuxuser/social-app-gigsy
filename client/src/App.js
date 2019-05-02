@@ -6,6 +6,7 @@ import Homepage from "./components/Homepage/Homepage";
 import PrivateRoute from "./components/PrivateRoute";
 import Admin from "./components/Admin/Admin";
 import ProfileFirst from "./components/Profile/ProfileFirst";
+import Register from "./components/Register/Register";
 import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
 import { loadUser } from "./actions/auth";
@@ -27,6 +28,7 @@ const App = () => {
       <Switch>
         <PrivateRoute exact path="/" component={Homepage} />
         <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
         {/* <Route path="/profile" component={Profile} /> */}
         <PrivateRoute path="/profile" component={Profile} />
         <Route path="/admin" component={Admin} />

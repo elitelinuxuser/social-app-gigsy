@@ -1,25 +1,31 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Feed, Icon } from "semantic-ui-react";
+import { addLike, removeLike, deletePost } from "../../actions/post";
 
 class Post extends Component {
+  state = {
+    name: "",
+    body: "",
+    date: "",
+    likes: 0
+  };
+
   render() {
+    const { name, body, date, likes } = this.state;
     return (
       <Feed.Event>
         <Feed.Label image="/images/avatar/small/joe.jpg" />
         <Feed.Content>
           <Feed.Summary>
-            <a>Joe Henderson</a>
-            <Feed.Date>3 days ago</Feed.Date>
+            <a>{name}</a>
+            <Feed.Date>{date}</Feed.Date>
           </Feed.Summary>
-          <Feed.Extra text>
-            Ours is a life of constant reruns. We're always circling back to
-            where we'd we started, then starting all over again. Even if we
-            don't run extra laps that day, we surely will come back for more of
-            the same another day soon.
-          </Feed.Extra>
+          <Feed.Extra text>{body}</Feed.Extra>
           <Feed.Meta>
             <Feed.Like>
-              <Icon name="like" />5 Likes
+              <Icon name="like" />
+              {likes} Likes
             </Feed.Like>
           </Feed.Meta>
         </Feed.Content>
@@ -28,4 +34,11 @@ class Post extends Component {
   }
 }
 
-export default Post;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { addLike, removeLike, deletePost }
+)(Post);

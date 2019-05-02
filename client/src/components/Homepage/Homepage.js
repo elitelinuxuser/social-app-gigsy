@@ -1,14 +1,22 @@
 import React, { Component } from "react";
 import { Menu, Segment, Container } from "semantic-ui-react";
 import Posts from "../Posts/Posts";
+import { connect } from "react-redux";
+import { logout } from "../../actions/auth";
 
-export default class MenuExampleSecondaryPointing extends Component {
+class Homepage extends Component {
   state = { activeItem: "home" };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
+  handleLogout = () => {
+    const { logout } = this.props;
+    logout();
+  };
+
   render() {
     const { activeItem } = this.state;
+    console.log(this.props);
 
     return (
       <div>
@@ -32,7 +40,7 @@ export default class MenuExampleSecondaryPointing extends Component {
             <Menu.Item
               name="logout"
               active={activeItem === "logout"}
-              onClick={this.handleItemClick}
+              onClick={this.handleLogout}
             />
           </Menu.Menu>
         </Menu>
@@ -46,3 +54,12 @@ export default class MenuExampleSecondaryPointing extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(
+  mapStateToProps,
+  { logout }
+)(Homepage);
