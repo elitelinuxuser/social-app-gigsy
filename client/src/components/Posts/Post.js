@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Feed, Icon } from "semantic-ui-react";
 
+
 class Post extends Component {
   render() {
     return (
@@ -27,5 +28,6 @@ class Post extends Component {
     );
   }
 }
+
 
 export default Post;
