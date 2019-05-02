@@ -1,0 +1,10 @@
+body > div,
+body > div > div,
+body > div > div > div.login-form {
+  height: 100%;
+}
+
+.oauth {
+  margin-left: 2em;
+  margin-right: 2em;
+}
