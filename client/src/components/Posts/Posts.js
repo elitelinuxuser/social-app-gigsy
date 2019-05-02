@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Feed, Icon, Container } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 import Post from "./Post";
 import PropTypes from "prop-types";
 import { getPosts } from "../../actions/post";
@@ -14,13 +14,7 @@ class Posts extends Component {
 
   render() {
     const { posts } = this.props.post;
-    return (
-      <Container>
-        {posts.map(post => (
-          <Post key={post._id} post={post} />
-        ))}
-      </Container>
-    );
+    return posts.map(post => <Post key={post._id} post={post} />);
   }
 }
 
