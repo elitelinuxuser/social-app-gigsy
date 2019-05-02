@@ -9,7 +9,10 @@ import {
   Icon,
   Container
 } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { login } from "../../actions/auth";
 import "./Login.css";
+import { Link, Redirect } from "react-router-dom";
 
 class Login extends Component {
   state = {
@@ -20,13 +23,23 @@ class Login extends Component {
 
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
+    const { login } = this.props;
     e.preventDefault();
     this.setState({
-      email: "",
-      password: "",
       loading: true
     });
+    const { email, password } = this.state;
+    await login(email, password);
+    this.setState({
+      loading: false
+    });
+  };
+
+  renderRedirect = () => {
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
   };
 
   render() {
@@ -37,6 +50,7 @@ class Login extends Component {
           <Header as="h2" textAlign="center">
             Login
           </Header>
+          {this.renderRedirect()}
           <Segment>
             <Form size="large" onSubmit={this.handleSubmit}>
               <Form.Input
@@ -77,7 +91,7 @@ class Login extends Component {
             </Button>
           </Segment>
           <Message align="center">
-            Not registered yet? <a href="#">Sign Up</a>
+            Not registered yet? <Link to="/register">Sign Up</Link>
           </Message>
         </Grid.Column>
       </Grid>
@@ -85,4 +99,11 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(
+  mapStateToProps,
+  { login }
+)(Login);
