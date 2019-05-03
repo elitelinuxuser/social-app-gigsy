@@ -9,6 +9,9 @@ app.use(cors());
 //ConnectDB
 connectDB();
 
+//Static Dir
+app.use("/uploads", express.static("uploads"));
+
 //Init Middleware
 app.use(express.json({ extended: false }));
 

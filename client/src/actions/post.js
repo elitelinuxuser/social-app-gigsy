@@ -17,6 +17,7 @@ const url = "http://35.244.44.23:5000";
 export const getPosts = () => async dispatch => {
   try {
     const res = await axios.get(`${url}/api/posts`);
+    // console.log(res.data);
 
     dispatch({
       type: GET_POSTS,
@@ -87,12 +88,21 @@ export const deletePost = id => async dispatch => {
 export const addPost = formData => async dispatch => {
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      // "Content-Type": "application/json"
+      // "Content-Type": "multipart/form-data"
+      "content-type": "multipart/form-data"
     }
   };
 
+  console.log(formData);
+
+  const modifiedFormData = new FormData();
+  // modifiedFormData.append("body", formData);
+  modifiedFormData.append("text", formData.text);
+  modifiedFormData.append("fileUrl", formData.fileUrl);
+
   try {
-    const res = await axios.post(`${url}/api/posts`, formData, config);
+    const res = await axios.post(`${url}/api/posts`, modifiedFormData, config);
 
     dispatch({
       type: ADD_POST,

@@ -8,16 +8,18 @@ import "./Posts.css";
 class Post extends Component {
   state = {
     liked: false,
-    visible: false
+    visible: false,
+    showDelete: false
   };
 
   async componentDidMount() {
     const { loadUser } = this.props;
     await loadUser();
-    const { user } = this.props.auth;
-    const { likes } = this.props.post;
+    const { auth } = this.props;
+    const { likes, user } = this.props.post;
     this.setState({
-      liked: likes.some(like => like.user === user._id),
+      liked: likes.some(like => like.user === auth.user._id),
+      showDelete: user === auth.user._id,
       visible: true
     });
   }
@@ -51,8 +53,9 @@ class Post extends Component {
   };
 
   render() {
-    const { liked, visible } = this.state;
-    const { name, avatar, date, likes, text } = this.props.post;
+    const { liked, visible, showDelete } = this.state;
+    const url = "http://35.244.44.23:5000/";
+    const { name, avatar, date, likes, text, fileUrl } = this.props.post;
     return (
       <Transition visible={visible} animation="drop" duration={500}>
         <Container className="mb-4" align="center">
@@ -66,12 +69,17 @@ class Post extends Component {
                     <Feed.Date>{date}</Feed.Date>
                   </Feed.Summary>
                   <Feed.Extra text>{text}</Feed.Extra>
+                  <Feed.Extra images>
+                    <a>
+                      <img src={url + fileUrl} />
+                    </a>
+                  </Feed.Extra>
                   <Feed.Meta>
                     <Feed.Like onClick={this.handleLike}>
                       <Icon name="like" color={liked ? "red" : "grey"} />
                       {likes.length} Likes
                     </Feed.Like>
-                    <a onClick={this.handleDelete}>Delete</a>
+                    {showDelete && <a onClick={this.handleDelete}>Delete</a>}
                   </Feed.Meta>
                 </Feed.Content>
               </Feed.Event>

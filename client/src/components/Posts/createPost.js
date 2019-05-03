@@ -1,20 +1,34 @@
 import React from "react";
-import { Container, Button, Header, Form } from "semantic-ui-react";
+import { Container, Button, Header, Form, Input } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { addPost } from "../../actions/post";
+import "./Posts.css";
 
 class createPost extends React.Component {
-  state = { text: "" };
+  state = { text: "", fileUrl: null };
 
   handleChange = e => this.setState({ text: e.target.value });
 
+  handleImageChange = async e => {
+    e.preventDefault();
+
+    let file = e.target.files[0];
+
+    console.log(file);
+
+    await this.setState({
+      fileUrl: file
+    });
+  };
+
   handleSubmit = async () => {
-    const { text } = this.state;
+    const { text, fileUrl } = this.state;
     const { addPost } = this.props;
-    await addPost({ text });
+    await addPost({ text, fileUrl });
     this.setState({
-      text: ""
+      text: "",
+      file: null
     });
   };
   //helper method
@@ -42,6 +56,13 @@ class createPost extends React.Component {
             value={text}
             control="textarea"
             rows="5"
+          />
+          Upload Image/Video{" "}
+          <Input
+            type="file"
+            accept="video/*,image/*"
+            className="upload"
+            onChange={e => this.handleImageChange(e)}
           />
           <Form.Group inline>
             <Form.Button content="Submit" />
