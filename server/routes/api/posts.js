@@ -7,6 +7,7 @@ const multer = require("multer");
 const Post = require("../../models/Post");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const fs = require("fs");
 
 //Multer Disk Storage
 const storage = multer.diskStorage({
@@ -132,6 +133,8 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(401).json({ msg: "User not authorized" });
     }
 
+    console.log(post.fileUrl);
+    fs.unlinkSync(post.fileUrl);
     await post.remove();
 
     res.json({ msg: "Post removed" });
