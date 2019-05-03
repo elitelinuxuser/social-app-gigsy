@@ -36,66 +36,64 @@ class Login extends Component {
     });
   };
 
-  renderRedirect = () => {
-    if (this.props.isAuthenticated) {
-      return <Redirect to="/" />;
-    }
-  };
-
   render() {
     const { email, password, loading } = this.state;
-    return (
-      <Grid centered columns={2} verticalAlign="middle">
-        <Grid.Column style={{ maxWidth: 450 }}>
-          <Header as="h2" textAlign="center">
-            Login
-          </Header>
-          {this.renderRedirect()}
-          <Segment>
-            <Form size="large" onSubmit={this.handleSubmit}>
-              <Form.Input
-                fluid
-                icon="user"
-                iconPosition="left"
-                name="email"
-                placeholder="Email address"
-                value={email}
-                onChange={this.handleChange}
-              />
-              <Form.Input
-                fluid
-                icon="lock"
-                iconPosition="left"
-                name="password"
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={this.handleChange}
-              />
+    const { isAuthenticated } = this.props;
+    if (!isAuthenticated) {
+      return (
+        <Grid centered columns={2} verticalAlign="middle">
+          <Grid.Column style={{ maxWidth: 450 }}>
+            <Header as="h2" textAlign="center">
+              Login
+            </Header>
+            <Segment>
+              <Form size="large" onSubmit={this.handleSubmit}>
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  name="email"
+                  placeholder="Email address"
+                  value={email}
+                  onChange={this.handleChange}
+                />
+                <Form.Input
+                  fluid
+                  icon="lock"
+                  iconPosition="left"
+                  name="password"
+                  placeholder="Password"
+                  type="password"
+                  value={password}
+                  onChange={this.handleChange}
+                />
 
-              <Button loading={loading} color="blue" fluid size="large">
-                Login
+                <Button loading={loading} color="blue" fluid size="large">
+                  Login
+                </Button>
+              </Form>
+            </Segment>
+            <Header as="h2" textAlign="center">
+              OR
+            </Header>
+            <Segment textAlign="center">
+              <Button compact className="oauth" color="google plus">
+                <Icon name="google" />
+                Google
               </Button>
-            </Form>
-          </Segment>
-          <Header as="h2" textAlign="center">
-            OR
-          </Header>
-          <Segment textAlign="center">
-            <Button compact className="oauth" color="google plus">
-              <Icon name="google" />
-              Google
-            </Button>
-            <Button compact className="oauth" color="facebook">
-              <Icon name="facebook" /> Facebook
-            </Button>
-          </Segment>
-          <Message align="center">
-            Not registered yet? <Link to="/register">Sign Up</Link>
-          </Message>
-        </Grid.Column>
-      </Grid>
-    );
+              <Button compact className="oauth" color="facebook">
+                <Icon name="facebook" /> Facebook
+              </Button>
+            </Segment>
+            <Message align="center">
+              Not registered yet? <Link to="/register">Sign Up</Link>
+            </Message>
+          </Grid.Column>
+        </Grid>
+      );
+    } else {
+      return <Redirect to="/" />;
+    }
   }
 }
 

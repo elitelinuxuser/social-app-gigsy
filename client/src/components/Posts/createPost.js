@@ -1,43 +1,45 @@
-import React from 'react'
-import { Container, Divider, Button, Header, Form } from "semantic-ui-react";
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Container, Button, Header, Form } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { addPost } from "../../actions/post";
 
 class createPost extends React.Component {
-  state = { postname: "", postdetails: "" };
+  state = { text: "" };
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value });
+  handleChange = e => this.setState({ text: e.target.value });
 
-  handleSubmit = () => {
-    const { postname, postdetails } = this.state;
-
+  handleSubmit = async () => {
+    const { text } = this.state;
+    const { addPost } = this.props;
+    await addPost({ text });
     this.setState({
-      postname: "",
-      postdetails: ""
+      text: ""
     });
   };
   //helper method
   render() {
-    const { postname, postdetails } = this.state;
+    const { text } = this.state;
     return (
       <Container>
-        <Divider />
         <Header as="h1" dividing>
           Please create the post
         </Header>
         <Form onSubmit={this.handleSubmit}>
-          <Form.Field
+          {/* <Form.Field
             label="Post Title:"
             name="postname"
             placeholder="What's in your mind?"
             value={postname}
             control="textarea"
             rows="1"
-          />
+          /> */}
           <Form.Field
             label="Write your post:"
-            name="postdetails"
+            name="text"
             placeholder="What's up!"
-            value={postdetails}
+            onChange={this.handleChange}
+            value={text}
             control="textarea"
             rows="5"
           />
@@ -48,10 +50,14 @@ class createPost extends React.Component {
             </Link>
           </Form.Group>
         </Form>
-        <Divider />
       </Container>
     );
   }
 }
 
-export default createPost;
+const mapStateToProps = state => ({});
+
+export default connect(
+  mapStateToProps,
+  { addPost }
+)(createPost);

@@ -4,17 +4,31 @@ import Post from "./Post";
 import PropTypes from "prop-types";
 import { getPosts } from "../../actions/post";
 import { connect } from "react-redux";
+import CreatePost from "./createPost";
 
 class Posts extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const { getPosts } = this.props;
 
-    getPosts();
+    await getPosts();
+  }
+
+  async componentDidUpdate() {
+    const { getPosts } = this.props;
+
+    await getPosts();
   }
 
   render() {
     const { posts } = this.props.post;
-    return posts.map(post => <Post key={post._id} post={post} />);
+    return (
+      <Container>
+        <CreatePost />
+        {posts.map(post => (
+          <Post key={post._id} post={post} />
+        ))}
+      </Container>
+    );
   }
 }
 
