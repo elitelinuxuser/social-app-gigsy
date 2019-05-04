@@ -5,10 +5,19 @@ const router = express.Router();
 const auth = require("../../middleware/auth");
 const admin = require("../../middleware/admin");
 const { check, validationResult } = require("express-validator/check");
+const nodemailer = require("nodemailer");
 
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
+
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "luciferhellwarrior@gmail.com",
+    pass: "Lucifer_01"
+  }
+});
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
@@ -113,6 +122,7 @@ router.post("/approve/:profile_id", admin, async (req, res) => {
 
   try {
     let profile = await Profile.findOne({ _id });
+    let user = await User.findOne({ _id: profile.user });
 
     if (profile) {
       // Update
@@ -121,6 +131,19 @@ router.post("/approve/:profile_id", admin, async (req, res) => {
         { $set: profileFields },
         { new: true }
       );
+
+      const mailOptions = {
+        from: "luciferhellwarrior@gmail.com",
+        to: user.email,
+        subject: "Profile approved from the social app",
+        html:
+          "<p>Congratulations! Your profile has been approved by the admin and you now have the access to create posts.</p>"
+      };
+
+      transporter.sendMail(mailOptions, function(err, info) {
+        if (err) console.log(err);
+        else console.log(info);
+      });
 
       return res.json(profile);
     }
@@ -137,9 +160,11 @@ router.post("/reject/:profile_id", admin, async (req, res) => {
   const _id = req.params.profile_id;
   const profileFields = {};
   profileFields.status = "rejected";
+  console.log(req.body.reason);
 
   try {
     let profile = await Profile.findOne({ _id });
+    let user = await User.findOne({ _id: profile.user });
 
     if (profile) {
       // Update
@@ -148,6 +173,20 @@ router.post("/reject/:profile_id", admin, async (req, res) => {
         { $set: profileFields },
         { new: true }
       );
+
+      const mailOptions = {
+        from: "luciferhellwarrior@gmail.com",
+        to: user.email,
+        subject: "Profile rejected from the social app",
+        html: `<p>This mail is to inform you that your profile has been rejected for the following reason: </p> <p>${
+          req.body.reason
+        }</p>`
+      };
+
+      transporter.sendMail(mailOptions, function(err, info) {
+        if (err) console.log(err);
+        else console.log(info);
+      });
 
       return res.json(profile);
     }

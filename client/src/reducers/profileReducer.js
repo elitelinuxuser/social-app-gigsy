@@ -3,7 +3,8 @@ import {
   PROFILE_ERROR,
   CLEAR_PROFILE,
   // UPDATE_PROFILE,
-  GET_PROFILES
+  GET_PROFILES,
+  APPROVE_PROFILE
 } from "../actions/types";
 
 const initialState = {
@@ -17,14 +18,14 @@ const initialState = {
 export default function(state = initialState, action) {
   const { type, payload } = action;
 
+  // case UPDATE_PROFILE:
+  //   return {
+  //     ...state,
+  //     profile: payload,
+  //     loading: false
+  //   };
   switch (type) {
     case GET_PROFILE:
-    // case UPDATE_PROFILE:
-    //   return {
-    //     ...state,
-    //     profile: payload,
-    //     loading: false
-    //   };
     case GET_PROFILES:
       return {
         ...state,
@@ -42,6 +43,12 @@ export default function(state = initialState, action) {
         ...state,
         profile: null,
         repos: [],
+        loading: false
+      };
+    case APPROVE_PROFILE:
+      return {
+        ...state,
+        profiles: state.profiles.filter(profile => profile._id !== payload),
         loading: false
       };
     default:
