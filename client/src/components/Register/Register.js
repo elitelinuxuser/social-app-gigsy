@@ -12,7 +12,7 @@ import {
   Icon
 } from "semantic-ui-react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 class Register extends Component {
   state = {
@@ -41,6 +41,12 @@ class Register extends Component {
     });
   };
 
+  renderRedirect = () => {
+    if (this.props.isAuthenticated) {
+      return <Redirect to="/" />;
+    }
+  };
+
   render() {
     const { name, email, password, loading } = this.state;
     return (
@@ -49,6 +55,7 @@ class Register extends Component {
           <Header as="h2" textAlign="center">
             Register
           </Header>
+          {this.renderRedirect()}
           <Segment>
             <Form size="large" onSubmit={this.handleSubmit}>
               <Form.Input
