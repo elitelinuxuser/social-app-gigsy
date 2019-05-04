@@ -31,7 +31,7 @@ const App = () => {
         <Route path="/register" component={Register} />
         {/* <Route path="/profile" component={Profile} /> */}
         <PrivateRoute path="/profile" component={Profile} />
-        <Route path="/admin" component={Admin} />
+        <PrivateRoute path="/admin" component={Admin} />
         <Route path="/profilefirst" component={ProfileFirst} />
       </Switch>
     </Router>

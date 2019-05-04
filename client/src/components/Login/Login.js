@@ -6,11 +6,10 @@ import {
   Header,
   Message,
   Segment,
-  Icon,
-  Container
+  Icon
 } from "semantic-ui-react";
 import { connect } from "react-redux";
-import { login } from "../../actions/auth";
+import { login, loadUser } from "../../actions/auth";
 import "./Login.css";
 import { Link, Redirect } from "react-router-dom";
 
@@ -24,21 +23,21 @@ class Login extends Component {
   handleChange = (e, { name, value }) => this.setState({ [name]: value });
 
   handleSubmit = async e => {
-    const { login } = this.props;
+    const { login, auth } = this.props;
     e.preventDefault();
     this.setState({
       loading: true
     });
     const { email, password } = this.state;
     await login(email, password);
-    this.setState({
-      loading: false
-    });
+    await loadUser();
   };
 
   render() {
     const { email, password, loading } = this.state;
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, auth } = this.props;
+
+    console.log(this.props.history.location.state);
     if (!isAuthenticated) {
       return (
         <Grid centered columns={2} verticalAlign="middle">
@@ -98,10 +97,11 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  auth: state.auth
 });
 
 export default connect(
   mapStateToProps,
-  { login }
+  { login, loadUser }
 )(Login);

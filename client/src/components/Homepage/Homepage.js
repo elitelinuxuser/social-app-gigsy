@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Menu } from "semantic-ui-react";
+import { Menu, Loader } from "semantic-ui-react";
 import Posts from "../Posts/Posts";
 import Profile from "../Profile/Profile";
 import { connect } from "react-redux";
 import { logout, loadUser } from "../../actions/auth";
 import { Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
 
 class Homepage extends Component {
   state = { activeItem: "home", authenticated: true };
@@ -20,15 +21,16 @@ class Homepage extends Component {
   };
 
   async componentDidMount() {
-    const { loadUser } = this.props;
+    const { loadUser, user } = this.props;
     await loadUser();
   }
 
   render() {
     const { activeItem } = this.state;
     const { authenticated } = this.state;
+    const { user } = this.props;
     let content;
-    console.log(this.props);
+    console.log(this.props.auth);
 
     if (activeItem === "home") {
       content = <Posts />;
@@ -36,38 +38,51 @@ class Homepage extends Component {
       content = <Profile />;
     }
 
-    if (authenticated)
-      return (
-        <div>
-          <Menu pointing secondary>
-            <Menu.Item
-              name="home"
-              active={activeItem === "home"}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name="profile"
-              active={activeItem === "profile"}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Menu position="right">
-              <Menu.Item
-                name="logout"
-                active={activeItem === "logout"}
-                onClick={this.handleLogout}
-              />
-            </Menu.Menu>
-          </Menu>
+    if (authenticated) {
+      if (!user) {
+        return <Loader />;
+      } else {
+        if (user.admin) {
+          return <Redirect to="/admin" />;
+        } else {
+          return (
+            <div>
+              <Menu pointing secondary>
+                <Menu.Item
+                  name="home"
+                  active={activeItem === "home"}
+                  onClick={this.handleItemClick}
+                />
+                <Menu.Item
+                  name="profile"
+                  active={activeItem === "profile"}
+                  onClick={this.handleItemClick}
+                />
+                <Menu.Menu position="right">
+                  <Menu.Item
+                    name="logout"
+                    active={activeItem === "logout"}
+                    onClick={this.handleLogout}
+                  />
+                </Menu.Menu>
+              </Menu>
 
-          {content}
-        </div>
-      );
-    else return <Redirect to="/login" />;
+              {content}
+            </div>
+          );
+        }
+      }
+    } else return <Redirect to="/login" />;
   }
 }
 
+Homepage.propTypes = {
+  user: PropTypes.object.isRequired
+};
+
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 });
 
 export default connect(
