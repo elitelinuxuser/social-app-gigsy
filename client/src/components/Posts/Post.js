@@ -4,12 +4,14 @@ import { Feed, Icon, Segment, Container, Transition } from "semantic-ui-react";
 import { addLike, removeLike, deletePost } from "../../actions/post";
 import { loadUser } from "../../actions/auth";
 import "./Posts.css";
+import "./styles.css";
 
 class Post extends Component {
   state = {
     liked: false,
     visible: false,
-    showDelete: false
+    showDelete: false,
+    isOpen: false
   };
 
   async componentDidMount() {
@@ -23,6 +25,10 @@ class Post extends Component {
       visible: true
     });
   }
+
+  handleShowDialog = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  };
 
   handleLike = async () => {
     const { addLike, removeLike } = this.props;
@@ -71,7 +77,27 @@ class Post extends Component {
                   <Feed.Extra text>{text}</Feed.Extra>
                   <Feed.Extra images>
                     <a>
-                      <img src={url + fileUrl} />
+                      <div>
+                        <img
+                          className="small"
+                          src={url + fileUrl}
+                          onClick={this.handleShowDialog}
+                        />
+                        {this.state.isOpen && (
+                          <dialog
+                            className="dialog"
+                            style={{ position: "absolute" }}
+                            open
+                            onClick={this.handleShowDialog}
+                          >
+                            <img
+                              className="img"
+                              src={url + fileUrl}
+                              onClick={this.handleShowDialog}
+                            />
+                          </dialog>
+                        )}
+                      </div>
                     </a>
                   </Feed.Extra>
                   <Feed.Meta>
