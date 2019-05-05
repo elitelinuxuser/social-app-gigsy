@@ -21,7 +21,7 @@ class Homepage extends Component {
   };
 
   async componentDidMount() {
-    const { loadUser, user } = this.props;
+    const { loadUser } = this.props;
     await loadUser();
   }
 
@@ -30,7 +30,7 @@ class Homepage extends Component {
     const { authenticated } = this.state;
     const { user } = this.props;
     let content;
-    console.log(this.props.auth);
+    console.log(this.props.user);
 
     if (activeItem === "home") {
       content = <Posts />;

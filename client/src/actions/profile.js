@@ -5,7 +5,7 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   PROFILE_ERROR,
-  //   UPDATE_PROFILE,
+  // UPDATE_PROFILE,
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
   APPROVE_PROFILE
@@ -139,11 +139,7 @@ export const rejectProfile = (text, profileId) => async dispatch => {
 };
 
 // Create or update profile
-export const createProfile = (
-  formData,
-  history,
-  edit = false
-) => async dispatch => {
+export const createProfile = (formData, edit = false) => async dispatch => {
   try {
     const config = {
       headers: {
@@ -159,10 +155,6 @@ export const createProfile = (
     });
 
     dispatch(setAlert(edit ? "Profile Updated" : "Profile Created", "success"));
-
-    if (!edit) {
-      history.push("/dashboard");
-    }
   } catch (err) {
     const errors = err.response.data.errors;
 

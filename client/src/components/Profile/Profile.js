@@ -1,116 +1,94 @@
 import React, { Component } from "react";
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  Radio,
-  Segment,
-  Message,
-  Container,
-  Header,
-  Select,
-  TextArea
-} from "semantic-ui-react";
-const options = [
-  { key: "m", text: "Male", value: "male" },
-  { key: "f", text: "Female", value: "female" }
-];
-const style = {
-  h1: {
-    marginTop: "3em"
-  }
-};
+import { connect } from "react-redux";
+import { getCurrentProfile, createProfile } from "../../actions/profile";
+import { Message, Container, Button } from "semantic-ui-react";
+
+import ProfileInfo from "./ProfileInfo";
+import ProfileForm from "./ProfileForm";
 
 class Profile extends Component {
   state = {
-    firstname: "",
-    lastname: "",
-    about: "",
-    gender: "",
-    phno: "",
-    isAgreed: "false"
+    create: false,
+    edit: false
   };
 
-  handleChange = (e, { name, value }) => {
-    this.setState({ [name]: value });
+  async componentDidMount() {
+    const { getCurrentProfile } = this.props;
+    await getCurrentProfile();
+  }
 
-    console.log(this.state);
-  };
-  handleSubmit = e => {
-    this.setState({
-      firstname: "",
-      lastname: "",
-      about: "",
-      gender: "",
-      phno: "",
-      isAgreed: "true"
+  handleUpdateProfile = async e => {
+    await this.setState({
+      edit: !this.state.edit
     });
   };
+
+  handleCreateProfile = async e => {
+    await this.setState({
+      create: true
+    });
+  };
+
   render() {
-    const { firstname, lastname, about, isAgreed, gender, phno } = this.state;
-    return (
-      <Container>
-        <Header as="h1" style={style.h1} dividing>
-          Please enter the details:
-        </Header>
-        <Message info>
-          <p>
-            We protect your data safely and we will not use it for monetory
-            purposes.
-          </p>
-        </Message>
-        <Segment inverted>
-          <Form inverted onSubmit={this.handleSubmit}>
-            <Form.Group widths="equal">
-              <Form.Input
-                label="First name"
-                name="firstname"
-                placeholder="First name"
-                value={firstname}
-                onChange={this.handleChange}
-              />
-              <Form.Input
-                label="Last name"
-                name="lastname"
-                placeholder="Last name"
-                value={lastname}
-                onChange={this.handleChange}
-              />
-              <Form.Select
-                label="Gender"
-                name="gender"
-                value={gender}
-                options={options}
-                placeholder="Gender"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-            <Form.Field
-              control={TextArea}
-              label="Status"
-              name="about"
-              onChange={this.handleChange}
-              value={about}
-              placeholder="Tell us more about you..."
+    const { profile } = this.props.profile;
+    const { create, edit } = this.state;
+    let content;
+    if (!profile) {
+      content = (
+        <Container>
+          <Message content="Profile not created yet. Please create on now!" />{" "}
+          <Button secondary onClick={this.handleCreateProfile}>
+            Create Profile
+          </Button>
+          {create && <ProfileForm />}
+        </Container>
+      );
+    } else {
+      if (profile.status === "pending") {
+        content = (
+          <Container>
+            <Message warning content="Profile status: Pending" />
+            <ProfileInfo profile={profile} />
+          </Container>
+        );
+      } else if (profile.status === "rejected") {
+        content = (
+          <Container>
+            <Message
+              warning
+              content="Profile status: Rejected, Please submit the profile again"
+            />{" "}
+            <Button primary align="center" onClick={this.handleUpdateProfile}>
+              {edit ? "Cancel" : "Update Profile"}
+            </Button>{" "}
+            {edit ? (
+              <ProfileForm profile={profile} edit />
+            ) : (
+              <ProfileInfo profile={profile} />
+            )}
+          </Container>
+        );
+      } else {
+        content = (
+          <Container>
+            <Message
+              success
+              content="Profile status: Approved. You have the ability to post!"
             />
-            <Form.Group inline>
-              <Form.Input
-                label="Phone Number"
-                name="phno"
-                placeholder="phno"
-                value={phno}
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-            <Form.Button inverted color="green">
-              Submit
-            </Form.Button>
-          </Form>
-        </Segment>
-      </Container>
-    );
+            <ProfileInfo profile={profile} />
+          </Container>
+        );
+      }
+    }
+    return content;
   }
 }
 
-export default Profile;
+const mapStateToProps = state => ({
+  profile: state.profile
+});
+
+export default connect(
+  mapStateToProps,
+  { getCurrentProfile, createProfile }
+)(Profile);
