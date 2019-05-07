@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   Button,
   Checkbox,
@@ -10,28 +10,28 @@ import {
   Container,
   Header,
   TextArea
-} from "semantic-ui-react";
-import { connect } from "react-redux";
-import { createProfile } from "../../actions/profile";
+} from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { createProfile } from '../../actions/profile';
 
 const options = [
-  { key: "m", text: "Male", value: "male" },
-  { key: "f", text: "Female", value: "female" }
+  { key: 'm', text: 'Male', value: 'male' },
+  { key: 'f', text: 'Female', value: 'female' }
 ];
 const style = {
   h1: {
-    marginTop: "3em"
+    marginTop: '3em'
   }
 };
 
 class ProfileForm extends Component {
   state = {
-    name: "",
-    username: "",
-    bio: "",
-    gender: "",
-    phone: "",
-    location: ""
+    name: '',
+    username: '',
+    bio: '',
+    gender: '',
+    phone: '',
+    location: ''
   };
 
   async componentDidMount() {
@@ -41,7 +41,7 @@ class ProfileForm extends Component {
         name: profile.name,
         username: profile.username,
         bio: profile.bio,
-        gender: "",
+        gender: '',
         phone: profile.phone,
         location: profile.location
       });
@@ -57,19 +57,19 @@ class ProfileForm extends Component {
     const { edit, createProfile } = this.props;
     await createProfile(this.state, edit ? true : false);
     this.setState({
-      name: "",
-      username: "",
-      bio: "",
-      gender: "",
-      phone: "",
-      location: ""
+      name: '',
+      username: '',
+      bio: '',
+      gender: '',
+      phone: '',
+      location: ''
     });
   };
   render() {
     const { name, username, bio, gender, phone, location } = this.state;
     return (
       <Container>
-        <Header as="h1" style={style.h1} dividing>
+        <Header as='h1' style={style.h1} dividing>
           Please enter the details:
         </Header>
         <Message info>
@@ -80,55 +80,55 @@ class ProfileForm extends Component {
         </Message>
         <Segment inverted>
           <Form inverted onSubmit={this.handleSubmit}>
-            <Form.Group widths="equal">
+            <Form.Group widths='equal'>
               <Form.Input
-                label="Full Name"
-                name="name"
-                placeholder="Full Name"
+                label='Full Name'
+                name='name'
+                placeholder='Full Name'
                 value={name}
                 onChange={this.handleChange}
               />
               <Form.Input
-                label="Username"
-                name="username"
-                placeholder="Username"
+                label='Username'
+                name='username'
+                placeholder='Username'
                 value={username}
                 onChange={this.handleChange}
               />
               <Form.Select
-                label="Gender"
-                name="gender"
+                label='Gender'
+                name='gender'
                 value={gender}
                 options={options}
-                placeholder="Gender"
+                placeholder='Gender'
                 onChange={this.handleChange}
               />
             </Form.Group>
             <Form.Field
               control={TextArea}
-              label="About Me"
-              name="bio"
+              label='About Me'
+              name='bio'
               onChange={this.handleChange}
               value={bio}
-              placeholder="Tell us more about you..."
+              placeholder='Tell us more about you...'
             />
             <Form.Group inline>
               <Form.Input
-                label="Phone Number"
-                name="phone"
-                placeholder="Enter your phone number"
+                label='Phone Number'
+                name='phone'
+                placeholder='Enter your phone number'
                 value={phone}
                 onChange={this.handleChange}
               />
               <Form.Input
-                label="Location"
-                name="location"
-                placeholder="State/City"
+                label='Location'
+                name='location'
+                placeholder='State/City'
                 value={location}
                 onChange={this.handleChange}
               />
             </Form.Group>
-            <Form.Button inverted color="green">
+            <Form.Button inverted color='green'>
               Submit
             </Form.Button>
           </Form>

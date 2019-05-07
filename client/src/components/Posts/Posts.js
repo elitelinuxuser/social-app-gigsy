@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { Container, Message, Button } from "semantic-ui-react";
-import Post from "./Post";
-import PropTypes from "prop-types";
-import { getPosts } from "../../actions/post";
-import { getCurrentProfile } from "../../actions/profile";
-import { connect } from "react-redux";
-import CreatePost from "./createPost";
+import React, { Component } from 'react';
+import { Container, Message, Header, Button, Divider } from 'semantic-ui-react';
+import Post from './Post';
+import PropTypes from 'prop-types';
+import { getPosts } from '../../actions/post';
+import { getCurrentProfile } from '../../actions/profile';
+import { connect } from 'react-redux';
+import CreatePost from './createPost';
 
 class Posts extends Component {
   async componentDidMount() {
@@ -25,15 +25,15 @@ class Posts extends Component {
     const { profile } = this.props.profile;
     let content;
     if (!profile) {
-      content = <Message warning content="Profile not created yet!" />;
+      content = <Message warning content='Profile not created yet!' />;
     } else {
-      if (profile.status === "pending") {
-        content = <Message warning content="Profile status: Pending" />;
-      } else if (profile.status === "rejected") {
+      if (profile.status === 'pending') {
+        content = <Message warning content='Profile status: Pending' />;
+      } else if (profile.status === 'rejected') {
         content = (
           <Message
             warning
-            content="Profile status: Rejected, Please submit the profile again"
+            content='Profile status: Rejected, Please submit the profile again'
           />
         );
       } else {
@@ -44,6 +44,8 @@ class Posts extends Component {
     return (
       <Container>
         {content}
+        <Header as='h2'>Here are the posts!</Header>
+        <Divider />
         {posts.map(post => (
           <Post key={post._id} post={post} />
         ))}

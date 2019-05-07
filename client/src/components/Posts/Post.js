@@ -1,10 +1,19 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import ModalImage from "react-modal-image";
-import { Feed, Icon, Segment, Container, Transition } from "semantic-ui-react";
-import { addLike, removeLike, deletePost } from "../../actions/post";
-import { loadUser } from "../../actions/auth";
-import "./Posts.css";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import ModalImage from 'react-modal-image';
+import {
+  Feed,
+  Icon,
+  Header,
+  Image,
+  Segment,
+  Divider,
+  Container,
+  Transition
+} from 'semantic-ui-react';
+import { addLike, removeLike, deletePost } from '../../actions/post';
+import { loadUser } from '../../actions/auth';
+import './Posts.css';
 
 class Post extends Component {
   state = {
@@ -56,12 +65,12 @@ class Post extends Component {
 
   render() {
     const { liked, visible, showDelete } = this.state;
-    const url = "http://35.244.44.23:5000/";
+    const url = 'http://35.244.44.23:5000/';
     const { name, avatar, date, likes, text, fileUrl } = this.props.post;
     return (
-      <Transition visible={visible} animation="drop" duration={500}>
-        <Container className="mb-4" align="center">
-          <Segment className="segment">
+      <Transition visible={visible} animation='drop' duration={500}>
+        <Container className='mb-4' align='center'>
+          <Segment className='segment'>
             <Feed>
               <Feed.Event>
                 <Feed.Label image={avatar} />
@@ -71,20 +80,20 @@ class Post extends Component {
                     <Feed.Date>{date}</Feed.Date>
                   </Feed.Summary>
                   <Feed.Extra text>{text}</Feed.Extra>
-                  <Feed.Extra images>
+                  <Image>
                     <a>
-                      <div style={{ maxWidth: "400px" }}>
+                      <div style={{ maxWidth: '400px' }}>
                         <ModalImage
                           small={url + fileUrl}
                           large={url + fileUrl}
-                          alt="Photos"
+                          alt='Photos'
                         />
                       </div>
                     </a>
-                  </Feed.Extra>
+                  </Image>
                   <Feed.Meta>
                     <Feed.Like onClick={this.handleLike}>
-                      <Icon name="like" color={liked ? "red" : "grey"} />
+                      <Icon name='like' color={liked ? 'red' : 'grey'} />
                       {likes.length} Likes
                     </Feed.Like>
                     {showDelete && <a onClick={this.handleDelete}>Delete</a>}

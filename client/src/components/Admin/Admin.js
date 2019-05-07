@@ -1,5 +1,5 @@
-import React, { Component, TextArea } from "react";
-import PropTypes from "prop-types";
+import React, { Component, TextArea } from 'react';
+import PropTypes from 'prop-types';
 import {
   Divider,
   Segment,
@@ -11,12 +11,12 @@ import {
   Card,
   Image,
   FormTextArea
-} from "semantic-ui-react";
-import { Tab } from "semantic-ui-react";
-import { connect } from "react-redux";
-import { logout } from "../../actions/auth";
-import { getPendingProfiles } from "../../actions/profile";
-import ProfileCard from "./ProfileCard";
+} from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { logout } from '../../actions/auth';
+import { getPendingProfiles } from '../../actions/profile';
+import ProfileCard from './ProfileCard';
 
 class Admin extends Component {
   state = {};
@@ -27,8 +27,8 @@ class Admin extends Component {
     console.log(this.props);
   }
 
-  handleSubmit = () => this.setState({ text: "" });
-  state = { activeItem: "admin", authenticated: true };
+  handleSubmit = () => this.setState({ text: '' });
+  state = { activeItem: 'admin', authenticated: true };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
@@ -41,10 +41,10 @@ class Admin extends Component {
   };
 
   handleApproved() {
-    alert("Mail sent");
+    alert('Mail sent');
   }
   handleDeclined() {
-    alert("mail sent successfully");
+    alert('Mail sent successfully');
   }
 
   render() {
@@ -53,26 +53,28 @@ class Admin extends Component {
 
     return (
       <div>
-        <Menu pointing secondary>
-          <Menu.Item
-            name="home"
-            active={activeItem === "home"}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Item
-            name="profile"
-            active={activeItem === "profile"}
-            onClick={this.handleItemClick}
-          />
-          <Menu.Menu position="right">
+        <Segment inverted>
+          <Menu inverted pointing secondary>
             <Menu.Item
-              name="logout"
-              active={activeItem === "logout"}
-              onClick={this.handleLogout}
+              name='home'
+              active={activeItem === 'home'}
+              onClick={this.handleItemClick}
             />
-          </Menu.Menu>
-        </Menu>
-        <Container style={{ marginTop: "3em" }}>
+            <Menu.Item
+              name='profile'
+              active={activeItem === 'profile'}
+              onClick={this.handleItemClick}
+            />
+            <Menu.Menu position='right'>
+              <Menu.Item
+                name='logout'
+                active={activeItem === 'logout'}
+                onClick={this.handleLogout}
+              />
+            </Menu.Menu>
+          </Menu>
+        </Segment>
+        <Container style={{ marginTop: '3em' }}>
           <Segment compact>
             <Card.Group>
               {/* {console.log(profiles)} */}
