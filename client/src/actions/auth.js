@@ -11,7 +11,7 @@ import {
   CLEAR_PROFILE
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
-
+//http://localhost:5000
 // const url = "http://35.244.44.23:5000";
 
 const url = "http://localhost:5000"; //Now this is the server on your pc.

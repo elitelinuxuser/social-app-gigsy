@@ -4,7 +4,7 @@ import {Divider,Segment,Container,Header,Menu,Form, Button, Card, Image, FormTex
 import { Tab } from 'semantic-ui-react'
 
 class MenuExampleSecondaryPointing extends Component {
-  state = {}
+  
 
   
   handleSubmit = () => this.setState({ text: ''})
@@ -27,7 +27,7 @@ class MenuExampleSecondaryPointing extends Component {
     
     return (
       <div>
-        <Menu pointing secondary>
+        <Menu pointing secondary className='menu'>
           <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
           <Menu.Menu position='right'>
             <Menu.Item

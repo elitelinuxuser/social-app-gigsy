@@ -25,8 +25,8 @@ class Homepage extends Component {
 
     return (
       <div>
-        <Menu pointing secondary>
-          <Menu.Item
+        <Menu pointing secondary className='menu'>
+          <Menu.Item className='menu-item'
             name="home"
             active={activeItem === "home"}
             onClick={this.handleItemClick}
