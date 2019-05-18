@@ -2,10 +2,42 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator/check");
 const auth = require("../../middleware/auth");
+const multer = require("multer");
 
 const Post = require("../../models/Post");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const fs = require("fs");
+
+//Multer Disk Storage
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: function(req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname);
+  }
+});
+
+//Filtering file being uploaded
+const fileFilter = (req, file, cb) => {
+  // reject a file
+  console.log(/image\/*/);
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
+
+//Limiting file size
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter
+});
 
 // @route    POST api/posts
 // @desc     Create a post
@@ -14,14 +46,18 @@ router.post(
   "/",
   [
     auth,
-    [
-      check("text", "Text is required")
-        .not()
-        .isEmpty()
-    ]
+    // [
+    //   check("text", "Text is required")
+    //     .not()
+    //     .isEmpty()
+    // ],
+    upload.single("fileUrl")
   ],
   async (req, res) => {
     const errors = validationResult(req);
+
+    console.log(req.body);
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -33,7 +69,8 @@ router.post(
         text: req.body.text,
         name: user.name,
         avatar: user.avatar,
-        user: req.user.id
+        user: req.user.id,
+        fileUrl: req.file.path
       });
 
       const post = await newPost.save();
@@ -96,6 +133,8 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(401).json({ msg: "User not authorized" });
     }
 
+    console.log(post.fileUrl);
+    fs.unlinkSync(post.fileUrl);
     await post.remove();
 
     res.json({ msg: "Post removed" });

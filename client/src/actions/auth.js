@@ -11,21 +11,21 @@ import {
   CLEAR_PROFILE
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
-//http://localhost:5000
-// const url = "http://35.244.44.23:5000";
 
-const url = "http://localhost:5000"; //Now this is the server on your pc.
+const url = "http://35.244.44.23:5000";
+
+// const url = "http://localhost:5000"; //Now this is the server on your pc.
 
 // Load User
 export const loadUser = () => async dispatch => {
   if (localStorage.token) {
-    setAuthToken(localStorage.token);
+    await setAuthToken(localStorage.token);
   }
 
   try {
     const res = await axios.get(`${url}/api/auth`);
 
-    dispatch({
+    await dispatch({
       type: USER_LOADED,
       payload: res.data
     });
@@ -87,12 +87,12 @@ export const login = (email, password) => async dispatch => {
   try {
     const res = await axios.post(`${url}/api/auth`, body, config);
 
-    dispatch({
+    await dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
     });
 
-    dispatch(loadUser());
+    await dispatch(await loadUser());
     console.log("Logged In");
   } catch (err) {
     const errors = err.response.data.errors;
@@ -109,7 +109,7 @@ export const login = (email, password) => async dispatch => {
 };
 
 // Logout / Clear Profile
-export const logout = () => dispatch => {
-  dispatch({ type: CLEAR_PROFILE });
-  dispatch({ type: LOGOUT });
+export const logout = () => async dispatch => {
+  await dispatch({ type: CLEAR_PROFILE });
+  await dispatch({ type: LOGOUT });
 };

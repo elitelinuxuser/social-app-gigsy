@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const setAuthToken = authToken => {
+const setAuthToken = async authToken => {
   if (authToken) {
     axios.defaults.headers.common["x-auth-token"] = authToken;
   } else {
-    delete axios.defaults.headers.common["x-auth-token"];
+    await delete axios.defaults.headers.common["x-auth-token"];
   }
 };
 

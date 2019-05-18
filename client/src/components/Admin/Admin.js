@@ -1,174 +1,100 @@
-import React,{Component,TextArea} from 'react'
-import PropTypes from 'prop-types'
-import {Divider,Segment,Container,Header,Menu,Form, Button, Card, Image, FormTextArea } from 'semantic-ui-react'
-import { Tab } from 'semantic-ui-react'
+import React, { Component, TextArea } from 'react';
+import PropTypes from 'prop-types';
+import {
+  Divider,
+  Segment,
+  Container,
+  Header,
+  Menu,
+  Form,
+  Button,
+  Card,
+  Image,
+  FormTextArea
+} from 'semantic-ui-react';
+import { Tab } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { logout } from '../../actions/auth';
+import { getPendingProfiles } from '../../actions/profile';
+import ProfileCard from './ProfileCard';
 
-class MenuExampleSecondaryPointing extends Component {
-  
+class Admin extends Component {
+  state = {};
 
-  
-  handleSubmit = () => this.setState({ text: ''})
-  state = { activeItem: 'home' }
+  async componentDidMount() {
+    const { getPendingProfiles } = this.props;
+    await getPendingProfiles();
+    console.log(this.props);
+  }
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+  handleSubmit = () => this.setState({ text: '' });
+  state = { activeItem: 'admin', authenticated: true };
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  handleLogout = async () => {
+    const { logout } = this.props;
+    await logout();
+    this.setState({
+      authenticated: false
+    });
+  };
 
   handleApproved() {
-    alert('Mail sent')
+    alert('Mail sent');
   }
   handleDeclined() {
-  
-      alert('mail sent successfully')
-    
+    alert('Mail sent successfully');
   }
-    
 
   render() {
-    const { activeItem } = this.state
-    
+    const { activeItem } = this.state;
+    const { profiles } = this.props;
+
     return (
       <div>
-        <Menu pointing secondary className='menu'>
-          <Menu.Item name='home' active={activeItem === 'home'} onClick={this.handleItemClick} />
-          <Menu.Menu position='right'>
+        <Segment inverted>
+          <Menu inverted pointing secondary>
             <Menu.Item
-              name='logout'
-              active={activeItem === 'logout'}
+              name='home'
+              active={activeItem === 'home'}
               onClick={this.handleItemClick}
             />
-          </Menu.Menu>
-        </Menu>
-      <Container style={{ marginTop: '3em' }}> 
-      <Segment compact>
-      <Card.Group>
-    
-      <Card fluid>
-      <Card.Content>
-        <Image verticalAlign='top' floated='right' size='tiny' circular src='https://react.semantic-ui.com/images/avatar/large/steve.jpg' />
-        <Card.Header>Steve Sanders</Card.Header>
-        <Card.Meta>+643563455</Card.Meta>
-        <Card.Meta>reliance@gmail.com</Card.Meta>
-        <Card.Meta>
-          Steve wants to add you to the group <strong>best friends</strong>
-        </Card.Meta>
-      </Card.Content>
-      <Card.Content extra>
-        <div>
-          <h5>Any reasons for declining the request?</h5>
-        <Form>
-          <Form.TextArea/>
-        </Form> 
-        </div>
-        <Divider hidden/>
-        <div>
-          <Button color='green' onClick={this.handleApproved}>
-            Approve
-          </Button>
-          <Button color='red' onClick={this.handleDeclined}>
-            Decline
-          </Button>
-        </div>
-      </Card.Content>
-    </Card>
-    
-    <Card fluid>
-      <Card.Content>
-        <Image verticalAlign='top' floated='right' size='tiny' circular src='https://react.semantic-ui.com/images/avatar/large/molly.png' />
-        <Card.Header>Molly Thomas</Card.Header>
-        <Card.Meta>+6352753</Card.Meta>
-        <Card.Meta>google@gmail.com</Card.Meta>
-        <Card.Meta>
-          Molly wants to add you to the group <strong>musicians</strong>
-        </Card.Meta>
-      </Card.Content>
-      <Card.Content extra>
-      <div>
-      <h5>Any reasons for declining the request?</h5>
-        <Form>
-         <Form.TextArea/>
-        </Form>
-        </div>
-        <Divider hidden/>
-        <div>
-          <Button color='green' onClick={this.handleApproved}>
-            Approve
-          </Button>
-          <Button color='red' onClick={this.handleDeclined}>
-            Decline
-          </Button>
-        </div>
-      </Card.Content>
-    </Card>
-   
-    <Card fluid>
-      <Card.Content>
-        <Image verticalAlign='top' floated='right' size='tiny' circular src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg' />
-        <Card.Header>Jenny Lawrence</Card.Header>
-        <Card.Meta>+63525236</Card.Meta>
-        <Card.Meta>google@gmail.com</Card.Meta>
-        <Card.Meta>Jenny requested permission to view your contact details</Card.Meta>
-      </Card.Content>
-      <Card.Content extra>
-      <div>
-      <h5>Any reasons for declining the request?</h5>
-        <Form>
-         <Form.TextArea/>
-        </Form>
-        </div>
-        <Divider hidden/>
-        <div>
-          
-          <Button color='green' onClick={this.handleApproved}>
-            Approve
-          </Button>
-          <Button color='red' onClick={this.handleDeclined}>
-            Decline
-          </Button>
-        </div>
-      
-      </Card.Content>
-    </Card>
-    
-    <Card fluid>
-      <Card.Content>
-        <Image verticalAlign='top' floated='right' size='tiny' circular src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg' />
-        <Card.Header>Jenny Lawrence</Card.Header>
-        <Card.Meta>+3546253</Card.Meta>
-        <Card.Meta>google@gmail.com</Card.Meta>
-        <Card.Meta>Jenny requested permission to view your contact details</Card.Meta>
-      </Card.Content>
-      <Card.Content extra>
-      <div>
-      <h5>Any reasons for declining the request?</h5>
-        <Form>
-         <Form.TextArea/>
-        </Form>
-        </div>
-        <Divider hidden/>
-        <div>
-          <Button color='green' onClick={this.handleApproved}>
-            Approve
-          </Button>
-          <Button color='red' onClick={this.handleDeclined}>
-            Decline
-          </Button>
-        </div>
-      
-      </Card.Content>
-    </Card>
-   </Card.Group>
-  </Segment>
-  </Container>
-  </div>
-  )
+            <Menu.Item
+              name='profile'
+              active={activeItem === 'profile'}
+              onClick={this.handleItemClick}
+            />
+            <Menu.Menu position='right'>
+              <Menu.Item
+                name='logout'
+                active={activeItem === 'logout'}
+                onClick={this.handleLogout}
+              />
+            </Menu.Menu>
+          </Menu>
+        </Segment>
+        <Container style={{ marginTop: '3em' }}>
+          <Segment compact>
+            <Card.Group>
+              {/* {console.log(profiles)} */}
+              {profiles.map(profile => (
+                <ProfileCard key={profile._id} profile={profile} />
+              ))}
+            </Card.Group>
+          </Segment>
+        </Container>
+      </div>
+    );
+  }
 }
-}
-  
 
-  
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated,
+  profiles: state.profile.profiles
+});
 
-export default MenuExampleSecondaryPointing;
-
-
-
-
-
+export default connect(
+  mapStateToProps,
+  { logout, getPendingProfiles }
+)(Admin);

@@ -3,11 +3,21 @@ const request = require("request");
 const config = require("config");
 const router = express.Router();
 const auth = require("../../middleware/auth");
+const admin = require("../../middleware/admin");
 const { check, validationResult } = require("express-validator/check");
+const nodemailer = require("nodemailer");
 
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
+
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "luciferhellwarrior@gmail.com",
+    pass: "Lucifer_01"
+  }
+});
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
@@ -36,12 +46,12 @@ router.get("/me", auth, async (req, res) => {
 router.post(
   "/",
   [
-    auth,
-    [
-      check("status", "Status is required")
-        .not()
-        .isEmpty()
-    ]
+    auth
+    // [
+    //   check("status", "Status is required")
+    //     .not()
+    //     .isEmpty()
+    // ]
   ],
   async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
@@ -50,7 +60,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { username, phone, location, bio, status, gender } = req.body;
+    const { username, phone, location, bio, gender } = req.body;
 
     // Build profile object
     const profileFields = {};
@@ -61,7 +71,7 @@ router.post(
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (gender) profileFields.gender = gender;
-    if (status) profileFields.status = status;
+    profileFields.status = "pending";
 
     try {
       let profile = await Profile.findOne({ user: req.user.id });
@@ -88,6 +98,103 @@ router.post(
     }
   }
 );
+
+//@route  GET api/profile/pending
+//@desc   Get pending profiles
+//@access Private
+router.get("/pending", admin, async (req, res) => {
+  try {
+    const profiles = await Profile.find({ status: "pending" });
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+//@route  POST api/profile/approve/:profile_id
+//@desc   Approve a profile
+//@access Private
+router.post("/approve/:profile_id", admin, async (req, res) => {
+  const _id = req.params.profile_id;
+  const profileFields = {};
+  profileFields.status = "approved";
+
+  try {
+    let profile = await Profile.findOne({ _id });
+    let user = await User.findOne({ _id: profile.user });
+
+    if (profile) {
+      // Update
+      profile = await Profile.findOneAndUpdate(
+        { _id },
+        { $set: profileFields },
+        { new: true }
+      );
+
+      const mailOptions = {
+        from: "luciferhellwarrior@gmail.com",
+        to: user.email,
+        subject: "Profile approved from the social app",
+        html:
+          "<p>Congratulations! Your profile has been approved by the admin and you now have the access to create posts.</p>"
+      };
+
+      transporter.sendMail(mailOptions, function(err, info) {
+        if (err) console.log(err);
+        else console.log(info);
+      });
+
+      return res.json(profile);
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+//@route  POST api/profile/reject/:profile_id
+//@desc   Approve a profile
+//@access Private
+router.post("/reject/:profile_id", admin, async (req, res) => {
+  const _id = req.params.profile_id;
+  const profileFields = {};
+  profileFields.status = "rejected";
+  console.log(req.body.reason);
+
+  try {
+    let profile = await Profile.findOne({ _id });
+    let user = await User.findOne({ _id: profile.user });
+
+    if (profile) {
+      // Update
+      profile = await Profile.findOneAndUpdate(
+        { _id },
+        { $set: profileFields },
+        { new: true }
+      );
+
+      const mailOptions = {
+        from: "luciferhellwarrior@gmail.com",
+        to: user.email,
+        subject: "Profile rejected from the social app",
+        html: `<p>This mail is to inform you that your profile has been rejected for the following reason: </p> <p>${
+          req.body.reason
+        }</p>`
+      };
+
+      transporter.sendMail(mailOptions, function(err, info) {
+        if (err) console.log(err);
+        else console.log(info);
+      });
+
+      return res.json(profile);
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // @route    GET api/profile
 // @desc     Get all profiles

@@ -5,12 +5,13 @@ import {
   GET_PROFILE,
   GET_PROFILES,
   PROFILE_ERROR,
-  //   UPDATE_PROFILE,
+  // UPDATE_PROFILE,
   CLEAR_PROFILE,
-  ACCOUNT_DELETED
+  ACCOUNT_DELETED,
+  APPROVE_PROFILE
 } from "./types";
 
-const url = "http://localhost:5000";
+const url = "http://35.244.44.23:5000";
 
 // Get current users profile
 export const getCurrentProfile = () => async dispatch => {
@@ -65,12 +66,80 @@ export const getProfileById = userId => async dispatch => {
   }
 };
 
+// Get pending profiles!
+export const getPendingProfiles = () => async dispatch => {
+  dispatch({ type: CLEAR_PROFILE });
+
+  try {
+    const res = await axios.get(`${url}/api/profile/pending`);
+
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Approve a profile
+export const approveProfile = profileId => async dispatch => {
+  console.log("approveTriggered");
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    await axios.post(
+      `${url}/api/profile/approve/${profileId}`,
+      { approved: true },
+      config
+    );
+
+    dispatch({
+      type: APPROVE_PROFILE,
+      payload: profileId
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Reject a profile
+export const rejectProfile = (text, profileId) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    await axios.post(
+      `${url}/api/profile/reject/${profileId}`,
+      { reason: text },
+      config
+    );
+    dispatch({
+      type: APPROVE_PROFILE,
+      payload: profileId
+    });
+  } catch (err) {
+    dispatch({
+      type: PROFILE_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+  getPendingProfiles();
+};
+
 // Create or update profile
-export const createProfile = (
-  formData,
-  history,
-  edit = false
-) => async dispatch => {
+export const createProfile = (formData, edit = false) => async dispatch => {
   try {
     const config = {
       headers: {
@@ -86,10 +155,6 @@ export const createProfile = (
     });
 
     dispatch(setAlert(edit ? "Profile Updated" : "Profile Created", "success"));
-
-    if (!edit) {
-      history.push("/dashboard");
-    }
   } catch (err) {
     const errors = err.response.data.errors;
 

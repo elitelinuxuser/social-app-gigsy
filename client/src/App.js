@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from "./components/Login/Login";
-import Profile from "./components/Profile/Profile";
+import ProfileForm from "./components/Profile/ProfileForm";
 import Homepage from "./components/Homepage/Homepage";
 import PrivateRoute from "./components/PrivateRoute";
 import Admin from "./components/Admin/Admin";
@@ -27,11 +27,11 @@ const App = () => {
     <Router>
       <Switch>
         <PrivateRoute exact path="/" component={Homepage} />
-        <Route path="/login" component={Homepage} />
+        <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
         {/* <Route path="/profile" component={Profile} /> */}
-        <PrivateRoute path="/profile" component={Profile} />
-        <Route path="/admin" component={Admin} />
+        <PrivateRoute path="/profile" component={ProfileForm} />
+        <PrivateRoute path="/admin" component={Admin} />
         <Route path="/profilefirst" component={ProfileFirst} />
       </Switch>
     </Router>

@@ -17,6 +17,7 @@ const url = "http://35.244.44.23:5000";
 export const getPosts = () => async dispatch => {
   try {
     const res = await axios.get(`${url}/api/posts`);
+    // console.log(res.data);
 
     dispatch({
       type: GET_POSTS,
@@ -25,7 +26,10 @@ export const getPosts = () => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
@@ -42,7 +46,10 @@ export const addLike = id => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
@@ -59,7 +66,10 @@ export const removeLike = id => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
@@ -78,7 +88,10 @@ export const deletePost = id => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
@@ -87,12 +100,19 @@ export const deletePost = id => async dispatch => {
 export const addPost = formData => async dispatch => {
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      "content-type": "multipart/form-data"
     }
   };
 
+  console.log(formData);
+
+  const modifiedFormData = new FormData();
+  // modifiedFormData.append("body", formData);
+  modifiedFormData.append("text", formData.text);
+  modifiedFormData.append("fileUrl", formData.fileUrl);
+
   try {
-    const res = await axios.post(`${url}/api/posts`, formData, config);
+    const res = await axios.post(`${url}/api/posts`, modifiedFormData, config);
 
     dispatch({
       type: ADD_POST,
@@ -103,7 +123,10 @@ export const addPost = formData => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
@@ -120,7 +143,10 @@ export const getPost = id => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
@@ -149,7 +175,10 @@ export const addComment = (postId, formData) => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
@@ -157,9 +186,7 @@ export const addComment = (postId, formData) => async dispatch => {
 // Delete comment
 export const deleteComment = (postId, commentId) => async dispatch => {
   try {
-    const res = await axios.delete(
-      `${url}/api/posts/comment/${postId}/${commentId}`
-    );
+    await axios.delete(`${url}/api/posts/comment/${postId}/${commentId}`);
 
     dispatch({
       type: REMOVE_COMMENT,
@@ -170,7 +197,10 @@ export const deleteComment = (postId, commentId) => async dispatch => {
   } catch (err) {
     dispatch({
       type: POST_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status }
+      payload: {
+        // msg: err.response.statusText,
+        status: err.response.status
+      }
     });
   }
 };
