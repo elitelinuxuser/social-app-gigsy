@@ -1,12 +1,19 @@
-import React from "react";
-import { Container, Button, Header, Form, Input } from "semantic-ui-react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { addPost } from "../../actions/post";
-import "./Posts.css";
+import React from 'react';
+import {
+  Container,
+  Button,
+  Segment,
+  Header,
+  Form,
+  Input
+} from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { addPost } from '../../actions/post';
+import './Posts.css';
 
 class createPost extends React.Component {
-  state = { text: "", fileUrl: null };
+  state = { text: '', fileUrl: null };
 
   handleChange = e => this.setState({ text: e.target.value });
 
@@ -27,7 +34,7 @@ class createPost extends React.Component {
     const { addPost } = this.props;
     await addPost({ text, fileUrl });
     this.setState({
-      text: "",
+      text: '',
       file: null
     });
   };
@@ -36,11 +43,12 @@ class createPost extends React.Component {
     const { text } = this.state;
     return (
       <Container>
-        <Header as="h1" dividing>
+        <Header as='h1' dividing>
           Please create the post
         </Header>
-        <Form onSubmit={this.handleSubmit}>
-          {/* <Form.Field
+        <Segment inverted>
+          <Form inverted onSubmit={this.handleSubmit}>
+            {/* <Form.Field
             label="Post Title:"
             name="postname"
             placeholder="What's in your mind?"
@@ -48,29 +56,30 @@ class createPost extends React.Component {
             control="textarea"
             rows="1"
           /> */}
-          <Form.Field
-            label="Write your post:"
-            name="text"
-            placeholder="What's up!"
-            onChange={this.handleChange}
-            value={text}
-            control="textarea"
-            rows="5"
-          />
-          Upload Image/Video{" "}
-          <Input
-            type="file"
-            accept="video/*,image/*"
-            className="upload"
-            onChange={e => this.handleImageChange(e)}
-          />
-          <Form.Group inline>
-            <Form.Button content="Submit" />
-            <Link to="/">
-              <Button content="Cancel" />
-            </Link>
-          </Form.Group>
-        </Form>
+            <Form.Field
+              label='Write your post:'
+              name='text'
+              placeholder="What's up!"
+              onChange={this.handleChange}
+              value={text}
+              control='textarea'
+              rows='5'
+            />
+            Upload Image/Video{' '}
+            <Input
+              type='file'
+              accept='video/*,image/*'
+              className='upload'
+              onChange={e => this.handleImageChange(e)}
+            />
+            <Form.Group inline>
+              <Form.Button inverted color='green' content='Submit' />
+              <Link to='/'>
+                <Button inverted color='red' content='Cancel' />
+              </Link>
+            </Form.Group>
+          </Form>
+        </Segment>
       </Container>
     );
   }

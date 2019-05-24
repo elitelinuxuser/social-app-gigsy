@@ -1,16 +1,18 @@
-import React, { Component } from "react";
-import { Container } from "semantic-ui-react";
-import Post from "./Post";
-import PropTypes from "prop-types";
-import { getPosts } from "../../actions/post";
-import { connect } from "react-redux";
-import CreatePost from "./createPost";
+import React, { Component } from 'react';
+import { Container, Message, Header, Button, Divider } from 'semantic-ui-react';
+import Post from './Post';
+import PropTypes from 'prop-types';
+import { getPosts } from '../../actions/post';
+import { getCurrentProfile } from '../../actions/profile';
+import { connect } from 'react-redux';
+import CreatePost from './createPost';
 
 class Posts extends Component {
   async componentDidMount() {
-    const { getPosts } = this.props;
-
+    const { getPosts, getCurrentProfile } = this.props;
+    await getCurrentProfile();
     await getPosts();
+    console.log(this.props);
   }
 
   async componentDidUpdate() {
@@ -20,10 +22,30 @@ class Posts extends Component {
   }
 
   render() {
+    const { profile } = this.props.profile;
+    let content;
+    if (!profile) {
+      content = <Message warning content='Profile not created yet!' />;
+    } else {
+      if (profile.status === 'pending') {
+        content = <Message warning content='Profile status: Pending' />;
+      } else if (profile.status === 'rejected') {
+        content = (
+          <Message
+            warning
+            content='Profile status: Rejected, Please submit the profile again'
+          />
+        );
+      } else {
+        content = <CreatePost />;
+      }
+    }
     const { posts } = this.props.post;
     return (
       <Container>
-        <CreatePost />
+        {content}
+        <Header as='h2'>Here are the posts!</Header>
+        <Divider />
         {posts.map(post => (
           <Post key={post._id} post={post} />
         ))}
@@ -38,10 +60,11 @@ Posts.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  post: state.post
+  post: state.post,
+  profile: state.profile
 });
 
 export default connect(
   mapStateToProps,
-  { getPosts }
+  { getPosts, getCurrentProfile }
 )(Posts);

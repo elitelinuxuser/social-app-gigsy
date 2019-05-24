@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { Menu, Loader } from "semantic-ui-react";
-import Posts from "../Posts/Posts";
-import Profile from "../Profile/Profile";
-import { connect } from "react-redux";
-import { logout, loadUser } from "../../actions/auth";
-import { Redirect } from "react-router-dom";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { Menu, Loader, Segment } from 'semantic-ui-react';
+import Posts from '../Posts/Posts';
+import Profile from '../Profile/Profile';
+import { connect } from 'react-redux';
+import { logout, loadUser } from '../../actions/auth';
+import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 class Homepage extends Component {
-  state = { activeItem: "home", authenticated: true };
+  state = { activeItem: 'home', authenticated: true };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
@@ -21,7 +21,7 @@ class Homepage extends Component {
   };
 
   async componentDidMount() {
-    const { loadUser, user } = this.props;
+    const { loadUser } = this.props;
     await loadUser();
   }
 
@@ -30,11 +30,11 @@ class Homepage extends Component {
     const { authenticated } = this.state;
     const { user } = this.props;
     let content;
-    console.log(this.props.auth);
+    console.log(this.props.user);
 
-    if (activeItem === "home") {
+    if (activeItem === 'home') {
       content = <Posts />;
-    } else if (activeItem === "profile") {
+    } else if (activeItem === 'profile') {
       content = <Profile />;
     }
 
@@ -43,36 +43,38 @@ class Homepage extends Component {
         return <Loader />;
       } else {
         if (user.admin) {
-          return <Redirect to="/admin" />;
+          return <Redirect to='/admin' />;
         } else {
           return (
             <div>
-              <Menu pointing secondary>
-                <Menu.Item
-                  name="home"
-                  active={activeItem === "home"}
-                  onClick={this.handleItemClick}
-                />
-                <Menu.Item
-                  name="profile"
-                  active={activeItem === "profile"}
-                  onClick={this.handleItemClick}
-                />
-                <Menu.Menu position="right">
+              <Segment inverted>
+                <Menu inverted pointing secondary>
                   <Menu.Item
-                    name="logout"
-                    active={activeItem === "logout"}
-                    onClick={this.handleLogout}
+                    name='home'
+                    active={activeItem === 'home'}
+                    onClick={this.handleItemClick}
                   />
-                </Menu.Menu>
-              </Menu>
+                  <Menu.Item
+                    name='profile'
+                    active={activeItem === 'profile'}
+                    onClick={this.handleItemClick}
+                  />
+                  <Menu.Menu position='right'>
+                    <Menu.Item
+                      name='logout'
+                      active={activeItem === 'logout'}
+                      onClick={this.handleLogout}
+                    />
+                  </Menu.Menu>
+                </Menu>
+              </Segment>
 
               {content}
             </div>
           );
         }
       }
-    } else return <Redirect to="/login" />;
+    } else return <Redirect to='/login' />;
   }
 }
 
