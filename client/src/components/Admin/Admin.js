@@ -14,12 +14,13 @@ import {
 } from 'semantic-ui-react';
 import { Tab } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import { logout } from '../../actions/auth';
 import { getPendingProfiles } from '../../actions/profile';
 import ProfileCard from './ProfileCard';
 
 class Admin extends Component {
-  state = {};
+  state = { activeItem: 'admin', authenticated: true };
 
   async componentDidMount() {
     const { getPendingProfiles } = this.props;
@@ -28,16 +29,15 @@ class Admin extends Component {
   }
 
   handleSubmit = () => this.setState({ text: '' });
-  state = { activeItem: 'admin', authenticated: true };
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
 
   handleLogout = async () => {
     const { logout } = this.props;
-    await logout();
     this.setState({
       authenticated: false
     });
+    await logout();
   };
 
   handleApproved() {
@@ -52,31 +52,35 @@ class Admin extends Component {
     const { profiles } = this.props;
     const { user } = this.props;
     const { authenticated } = this.state;
-    return (
-      <div>
-        <Segment inverted>
-          <Menu inverted pointing secondary>
-            <Menu.Menu position='right'>
-              <Menu.Item
-                name='logout'
-                active={activeItem === 'logout'}
-                onClick={this.handleLogout}
-              />
-            </Menu.Menu>
-          </Menu>
-        </Segment>
-        <Container style={{ marginTop: '3em' }}>
-          <Segment compact>
-            <Card.Group>
-              {/* {console.log(profiles)} */}
-              {profiles.map(profile => (
-                <ProfileCard key={profile._id} profile={profile} />
-              ))}
-            </Card.Group>
+    if (authenticated) {
+      return (
+        <div>
+          <Segment inverted>
+            <Menu inverted pointing secondary>
+              <Menu.Menu position='right'>
+                <Link exact to='/login'>
+                  <Menu.Item
+                    name='logout'
+                    active={activeItem === 'logout'}
+                    onClick={this.handleLogout}
+                  />
+                </Link>
+              </Menu.Menu>
+            </Menu>
           </Segment>
-        </Container>
-      </div>
-    );
+          <Container style={{ marginTop: '3em' }}>
+            <Segment compact>
+              <Card.Group>
+                {/* {console.log(profiles)} */}
+                {profiles.map(profile => (
+                  <ProfileCard key={profile._id} profile={profile} />
+                ))}
+              </Card.Group>
+            </Segment>
+          </Container>
+        </div>
+      );
+    } else return <Redirect to='/login' />;
   }
 }
 

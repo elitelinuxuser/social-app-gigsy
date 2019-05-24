@@ -25,6 +25,10 @@ class Homepage extends Component {
     await loadUser();
   }
 
+  setActiveItem = item => {
+    this.setState({ activeItem: item });
+  };
+
   render() {
     const { activeItem } = this.state;
     const { authenticated } = this.state;
@@ -33,7 +37,7 @@ class Homepage extends Component {
     console.log(this.props.user);
 
     if (activeItem === 'home') {
-      content = <Posts />;
+      content = <Posts setActiveItem={this.setActiveItem} />;
     } else if (activeItem === 'profile') {
       content = <Profile />;
     }

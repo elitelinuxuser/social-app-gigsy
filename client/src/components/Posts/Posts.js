@@ -17,7 +17,14 @@ import CreatePost from './createPost';
 class Posts extends Component {
   state = { activeItem: 'home' };
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  //handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
+  handleItemClick = () => {
+    const { setActiveItem } = this.props;
+    console.log(this.props);
+    setActiveItem('profile');
+  };
+
   async componentDidMount() {
     const { getPosts, getCurrentProfile } = this.props;
     await getCurrentProfile();
