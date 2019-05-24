@@ -1,5 +1,12 @@
-import React, { Component } from 'react';
-import { Container, Message, Header, Button, Divider } from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react';
+import {
+  Menu,
+  Container,
+  Message,
+  Header,
+  Button,
+  Divider
+} from 'semantic-ui-react';
 import Post from './Post';
 import PropTypes from 'prop-types';
 import { getPosts } from '../../actions/post';
@@ -8,6 +15,9 @@ import { connect } from 'react-redux';
 import CreatePost from './createPost';
 
 class Posts extends Component {
+  state = { activeItem: 'home' };
+
+  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
   async componentDidMount() {
     const { getPosts, getCurrentProfile } = this.props;
     await getCurrentProfile();
@@ -23,9 +33,22 @@ class Posts extends Component {
 
   render() {
     const { profile } = this.props.profile;
+    const { activeItem } = this.state;
     let content;
     if (!profile) {
-      content = <Message warning content='Profile not created yet!' />;
+      content = (
+        <Fragment>
+          <Message warning content='Profile not created yet!' />
+          <Button
+            active={activeItem === 'profile'}
+            onClick={this.handleItemClick}
+            inverted
+            color='teal'
+          >
+            Create Profile
+          </Button>
+        </Fragment>
+      );
     } else {
       if (profile.status === 'pending') {
         content = <Message warning content='Profile status: Pending' />;

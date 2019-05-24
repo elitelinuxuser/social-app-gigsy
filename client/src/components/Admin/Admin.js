@@ -50,21 +50,12 @@ class Admin extends Component {
   render() {
     const { activeItem } = this.state;
     const { profiles } = this.props;
-
+    const { user } = this.props;
+    const { authenticated } = this.state;
     return (
       <div>
         <Segment inverted>
           <Menu inverted pointing secondary>
-            <Menu.Item
-              name='home'
-              active={activeItem === 'home'}
-              onClick={this.handleItemClick}
-            />
-            <Menu.Item
-              name='profile'
-              active={activeItem === 'profile'}
-              onClick={this.handleItemClick}
-            />
             <Menu.Menu position='right'>
               <Menu.Item
                 name='logout'
