@@ -1,5 +1,5 @@
-import axios from "axios";
-import { setAlert } from "./alert";
+import axios from 'axios';
+import { setAlert } from './alert';
 
 import {
   GET_PROFILE,
@@ -9,10 +9,10 @@ import {
   CLEAR_PROFILE,
   ACCOUNT_DELETED,
   APPROVE_PROFILE
-} from "./types";
+} from './types';
 
-const url = "http://35.244.44.23:5000";
-
+//const url = "http://35.244.44.23:5000";
+const url = 'http://localhost:5000';
 // Get current users profile
 export const getCurrentProfile = () => async dispatch => {
   try {
@@ -87,11 +87,11 @@ export const getPendingProfiles = () => async dispatch => {
 
 // Approve a profile
 export const approveProfile = profileId => async dispatch => {
-  console.log("approveTriggered");
+  console.log('approveTriggered');
   try {
     const config = {
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       }
     };
     await axios.post(
@@ -117,7 +117,7 @@ export const rejectProfile = (text, profileId) => async dispatch => {
   try {
     const config = {
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       }
     };
     await axios.post(
@@ -143,7 +143,7 @@ export const createProfile = (formData, edit = false) => async dispatch => {
   try {
     const config = {
       headers: {
-        "Content-Type": "application/json"
+        'Content-Type': 'application/json'
       }
     };
 
@@ -154,12 +154,12 @@ export const createProfile = (formData, edit = false) => async dispatch => {
       payload: res.data
     });
 
-    dispatch(setAlert(edit ? "Profile Updated" : "Profile Created", "success"));
+    dispatch(setAlert(edit ? 'Profile Updated' : 'Profile Created', 'success'));
   } catch (err) {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
 
     dispatch({
@@ -171,14 +171,14 @@ export const createProfile = (formData, edit = false) => async dispatch => {
 
 // Delete account & profile
 export const deleteAccount = () => async dispatch => {
-  if (window.confirm("Are you sure? This can NOT be undone!")) {
+  if (window.confirm('Are you sure? This can NOT be undone!')) {
     try {
       await axios.delete(`${url}/api/profile`);
 
       dispatch({ type: CLEAR_PROFILE });
       dispatch({ type: ACCOUNT_DELETED });
 
-      dispatch(setAlert("Your account has been permanantly deleted"));
+      dispatch(setAlert('Your account has been permanantly deleted'));
     } catch (err) {
       dispatch({
         type: PROFILE_ERROR,

@@ -1,42 +1,42 @@
-const express = require("express");
-const request = require("request");
-const config = require("config");
+const express = require('express');
+const request = require('request');
+const config = require('config');
 const router = express.Router();
-const auth = require("../../middleware/auth");
-const admin = require("../../middleware/admin");
-const { check, validationResult } = require("express-validator/check");
-const nodemailer = require("nodemailer");
+const auth = require('../../middleware/auth');
+const admin = require('../../middleware/admin');
+const { check, validationResult } = require('express-validator/check');
+const nodemailer = require('nodemailer');
 
-const Profile = require("../../models/Profile");
-const User = require("../../models/User");
-const Post = require("../../models/Post");
+const Profile = require('../../models/Profile');
+const User = require('../../models/User');
+const Post = require('../../models/Post');
 
 var transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: 'gmail',
   auth: {
-    user: "luciferhellwarrior@gmail.com",
-    pass: "Lucifer_01"
+    user: 'luciferhellwarrior@gmail.com',
+    pass: 'Lucifer_01'
   }
 });
 
 // @route    GET api/profile/me
 // @desc     Get current users profile
 // @access   Private
-router.get("/me", auth, async (req, res) => {
+router.get('/me', auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id }).populate(
-      "user",
-      ["name", "avatar"]
+      'user',
+      ['name', 'avatar']
     );
 
     if (!profile) {
-      return res.status(400).json({ msg: "There is no profile for this user" });
+      return res.status(400).json({ msg: 'There is no profile for this user' });
     }
 
     res.json(profile);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
@@ -44,7 +44,7 @@ router.get("/me", auth, async (req, res) => {
 // @desc     Create or update user profile
 // @access   Private
 router.post(
-  "/",
+  '/',
   [
     auth
     // [
@@ -54,7 +54,7 @@ router.post(
     // ]
   ],
   async (req, res) => {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).select('-password');
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
@@ -71,7 +71,7 @@ router.post(
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
     if (gender) profileFields.gender = gender;
-    profileFields.status = "pending";
+    profileFields.status = 'pending';
 
     try {
       let profile = await Profile.findOne({ user: req.user.id });
@@ -94,7 +94,7 @@ router.post(
       res.json(profile);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   }
 );
@@ -102,23 +102,23 @@ router.post(
 //@route  GET api/profile/pending
 //@desc   Get pending profiles
 //@access Private
-router.get("/pending", admin, async (req, res) => {
+router.get('/pending', admin, async (req, res) => {
   try {
-    const profiles = await Profile.find({ status: "pending" });
+    const profiles = await Profile.find({ status: 'pending' });
     res.json(profiles);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
 //@route  POST api/profile/approve/:profile_id
 //@desc   Approve a profile
 //@access Private
-router.post("/approve/:profile_id", admin, async (req, res) => {
+router.post('/approve/:profile_id', admin, async (req, res) => {
   const _id = req.params.profile_id;
   const profileFields = {};
-  profileFields.status = "approved";
+  profileFields.status = 'approved';
 
   try {
     let profile = await Profile.findOne({ _id });
@@ -133,11 +133,11 @@ router.post("/approve/:profile_id", admin, async (req, res) => {
       );
 
       const mailOptions = {
-        from: "luciferhellwarrior@gmail.com",
+        from: 'luciferhellwarrior@gmail.com',
         to: user.email,
-        subject: "Profile approved from the social app",
+        subject: 'Profile approved from the social app',
         html:
-          "<p>Congratulations! Your profile has been approved by the admin and you now have the access to create posts.</p>"
+          '<p>Congratulations! Your profile has been approved by the admin and you now have the access to create posts.</p>'
       };
 
       transporter.sendMail(mailOptions, function(err, info) {
@@ -149,17 +149,17 @@ router.post("/approve/:profile_id", admin, async (req, res) => {
     }
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
 //@route  POST api/profile/reject/:profile_id
 //@desc   Approve a profile
 //@access Private
-router.post("/reject/:profile_id", admin, async (req, res) => {
+router.post('/reject/:profile_id', admin, async (req, res) => {
   const _id = req.params.profile_id;
   const profileFields = {};
-  profileFields.status = "rejected";
+  profileFields.status = 'rejected';
   console.log(req.body.reason);
 
   try {
@@ -175,9 +175,9 @@ router.post("/reject/:profile_id", admin, async (req, res) => {
       );
 
       const mailOptions = {
-        from: "luciferhellwarrior@gmail.com",
+        from: 'luciferhellwarrior@gmail.com',
         to: user.email,
-        subject: "Profile rejected from the social app",
+        subject: 'Profile rejected from the social app',
         html: `<p>This mail is to inform you that your profile has been rejected for the following reason: </p> <p>${
           req.body.reason
         }</p>`
@@ -192,48 +192,48 @@ router.post("/reject/:profile_id", admin, async (req, res) => {
     }
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
 // @route    GET api/profile
 // @desc     Get all profiles
 // @access   Public
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    const profiles = await Profile.find().populate('user', ['name', 'avatar']);
     res.json(profiles);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
 // @route    GET api/profile/user/:user_id
 // @desc     Get profile by user ID
 // @access   Public
-router.get("/user/:user_id", async (req, res) => {
+router.get('/user/:user_id', async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id
-    }).populate("user", ["name", "avatar"]);
+    }).populate('user', ['name', 'avatar']);
 
-    if (!profile) return res.status(400).json({ msg: "Profile not found" });
+    if (!profile) return res.status(400).json({ msg: 'Profile not found' });
 
     res.json(profile);
   } catch (err) {
     console.error(err.message);
-    if (err.kind == "ObjectId") {
-      return res.status(400).json({ msg: "Profile not found" });
+    if (err.kind == 'ObjectId') {
+      return res.status(400).json({ msg: 'Profile not found' });
     }
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 
 // @route    DELETE api/profile
 // @desc     Delete profile, user & posts
 // @access   Private
-router.delete("/", auth, async (req, res) => {
+router.delete('/', auth, async (req, res) => {
   try {
     // Remove user posts
     await Post.deleteMany({ user: req.user.id });
@@ -242,10 +242,10 @@ router.delete("/", auth, async (req, res) => {
     // Remove user
     await User.findOneAndRemove({ _id: req.user.id });
 
-    res.json({ msg: "User deleted" });
+    res.json({ msg: 'User deleted' });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res.status(500).send('Server Error');
   }
 });
 

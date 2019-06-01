@@ -1,5 +1,5 @@
-import axios from "axios";
-import { setAlert } from "./alert";
+import axios from 'axios';
+import { setAlert } from './alert';
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -9,12 +9,12 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_PROFILE
-} from "./types";
-import setAuthToken from "../utils/setAuthToken";
+} from './types';
+import setAuthToken from '../utils/setAuthToken';
 
-const url = "http://35.244.44.23:5000";
+//const url = "http://35.244.44.23:5000";
 
-// const url = "http://localhost:5000"; //Now this is the server on your pc.
+const url = 'http://localhost:5000'; //Now this is the server on your pc.
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -40,7 +40,7 @@ export const loadUser = () => async dispatch => {
 export const register = ({ name, email, password }) => async dispatch => {
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     }
   };
 
@@ -61,7 +61,7 @@ export const register = ({ name, email, password }) => async dispatch => {
     const errors = err.response.data.errors;
 
     if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
 
     dispatch({
@@ -74,11 +74,11 @@ export const register = ({ name, email, password }) => async dispatch => {
 export const login = (email, password) => async dispatch => {
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     }
   };
 
-  console.log("Action: Login");
+  console.log('Action: Login');
 
   const body = JSON.stringify({ email, password });
 
@@ -93,13 +93,13 @@ export const login = (email, password) => async dispatch => {
     });
 
     await dispatch(await loadUser());
-    console.log("Logged In");
+    console.log('Logged In');
   } catch (err) {
     const errors = err.response.data.errors;
 
     if (errors) {
       console.log(errors);
-      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
 
     dispatch({

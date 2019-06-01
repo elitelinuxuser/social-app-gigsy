@@ -1,5 +1,5 @@
-import axios from "axios";
-import { setAlert } from "./alert";
+import axios from 'axios';
+import { setAlert } from './alert';
 import {
   GET_POSTS,
   POST_ERROR,
@@ -9,10 +9,10 @@ import {
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT
-} from "./types";
+} from './types';
 
-const url = "http://35.244.44.23:5000";
-
+//const url = "http://35.244.44.23:5000";
+const url = 'http://localhost:5000';
 // Get posts
 export const getPosts = () => async dispatch => {
   try {
@@ -24,11 +24,12 @@ export const getPosts = () => async dispatch => {
       payload: res.data
     });
   } catch (err) {
+    console.log(err);
     dispatch({
       type: POST_ERROR,
       payload: {
         // msg: err.response.statusText,
-        status: err.response.status
+        status: err.response
       }
     });
   }
@@ -84,7 +85,7 @@ export const deletePost = id => async dispatch => {
       payload: id
     });
 
-    dispatch(setAlert("Post Removed", "success"));
+    dispatch(setAlert('Post Removed', 'success'));
   } catch (err) {
     dispatch({
       type: POST_ERROR,
@@ -100,7 +101,7 @@ export const deletePost = id => async dispatch => {
 export const addPost = formData => async dispatch => {
   const config = {
     headers: {
-      "content-type": "multipart/form-data"
+      'content-type': 'multipart/form-data'
     }
   };
 
@@ -108,8 +109,8 @@ export const addPost = formData => async dispatch => {
 
   const modifiedFormData = new FormData();
   // modifiedFormData.append("body", formData);
-  modifiedFormData.append("text", formData.text);
-  modifiedFormData.append("fileUrl", formData.fileUrl);
+  modifiedFormData.append('text', formData.text);
+  modifiedFormData.append('fileUrl', formData.fileUrl);
 
   try {
     const res = await axios.post(`${url}/api/posts`, modifiedFormData, config);
@@ -119,13 +120,14 @@ export const addPost = formData => async dispatch => {
       payload: res.data
     });
 
-    dispatch(setAlert("Post Created", "success"));
+    dispatch(setAlert('Post Created', 'success'));
   } catch (err) {
+    console.log(err);
     dispatch({
       type: POST_ERROR,
       payload: {
         // msg: err.response.statusText,
-        status: err.response.status
+        status: err.response
       }
     });
   }
@@ -155,7 +157,7 @@ export const getPost = id => async dispatch => {
 export const addComment = (postId, formData) => async dispatch => {
   const config = {
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json'
     }
   };
 
@@ -171,7 +173,7 @@ export const addComment = (postId, formData) => async dispatch => {
       payload: res.data
     });
 
-    dispatch(setAlert("Comment Added", "success"));
+    dispatch(setAlert('Comment Added', 'success'));
   } catch (err) {
     dispatch({
       type: POST_ERROR,
@@ -193,7 +195,7 @@ export const deleteComment = (postId, commentId) => async dispatch => {
       payload: commentId
     });
 
-    dispatch(setAlert("Comment Removed", "success"));
+    dispatch(setAlert('Comment Removed', 'success'));
   } catch (err) {
     dispatch({
       type: POST_ERROR,

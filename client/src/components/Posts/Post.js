@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ReactPlayer from 'react-player';
 import ModalImage from 'react-modal-image';
 import {
   Feed,
   Icon,
   Header,
   Image,
+  Loader,
   Segment,
   Divider,
   Container,
@@ -65,8 +67,17 @@ class Post extends Component {
 
   render() {
     const { liked, visible, showDelete } = this.state;
-    const url = 'http://35.244.44.23:5000/';
-    const { name, avatar, date, likes, text, fileUrl } = this.props.post;
+    const url = 'http://localhost:5000/';
+    const {
+      name,
+      avatar,
+      date,
+      likes,
+      text,
+      fileUrl,
+      mimeType
+    } = this.props.post;
+    console.log(fileUrl);
     return (
       <Transition visible={visible} animation='drop' duration={500}>
         <Container className='mb-4' align='center'>
@@ -80,17 +91,30 @@ class Post extends Component {
                     <Feed.Date>{date}</Feed.Date>
                   </Feed.Summary>
                   <Feed.Extra text>{text}</Feed.Extra>
-                  <Image>
-                    <a>
-                      <div style={{ maxWidth: '400px' }}>
-                        <ModalImage
-                          small={url + fileUrl}
-                          large={url + fileUrl}
-                          alt='Photos'
-                        />
-                      </div>
-                    </a>
-                  </Image>
+                  {mimeType ? (
+                    mimeType.startsWith('image') && (
+                      <Image>
+                        <a>
+                          <div style={{ maxWidth: '500px' }}>
+                            <ModalImage
+                              small={url + fileUrl}
+                              large={url + fileUrl}
+                              alt='Photos'
+                            />
+                          </div>
+                        </a>
+                      </Image>
+                    )
+                  ) : (
+                    <Loader />
+                  )}
+                  {mimeType ? (
+                    mimeType.startsWith('video') && (
+                      <ReactPlayer url={url + fileUrl} controls />
+                    )
+                  ) : (
+                    <Loader />
+                  )}
                   <Feed.Meta>
                     <Feed.Like onClick={this.handleLike}>
                       <Icon name='like' color={liked ? 'red' : 'grey'} />
